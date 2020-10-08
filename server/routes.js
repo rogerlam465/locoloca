@@ -1,6 +1,9 @@
 const router = require("express").Router();
 
-const { } = require('./handlers');
+const { getUser, createUser, modifyUser, deleteUser } = require('./userHandlers');
+const { getCart, modifyCart, clearCart } = require('./cartHandlers');
+const { getShop, createShop, modifyShop, deleteShop } = require('./shopHandlers');
+const { getItem, createItem, updateItem, deleteItem } = require('./itemHandlers');
 
 // TODO:
 
@@ -8,8 +11,9 @@ const { } = require('./handlers');
 // /api/user/cart (get, patch, delete)
 // /api/store (get, put, patch, delete)
 
-// y'know, all the get/delete routes are very similar and simple.
-// Can we just create a fetch helper?
+// all the get things *look* similar, but honestly, maybe
+// they need to be separate things for the sake of separation
+// of concerns
 
 // user management routes
 
@@ -26,10 +30,10 @@ router.delete('/api/user/cart', clearCart);
 
 // store management routes
 
-router.get('/api/store', getStore);
-router.post('/api/store', createStore);
-router.patch('/api/store', modifyStore);
-router.delete('/api/store', deleteStore);
+router.get('/api/shop', getShop);
+router.post('/api/shop', createShop);
+router.patch('/api/shop', modifyShop);
+router.delete('/api/shop', deleteShop);
 
 // item management routes
 
