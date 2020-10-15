@@ -33,10 +33,15 @@ const dbClose = () => {
 // there's got to be a better way of doing this. This is so repetitive.
 
 const getUser = async (req, res) => {
+  // obvs. this is going to have to get something from the req body
+  // this can't really be done without that.
+
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
+
+    await db.collection("users").find();
 
     dbClose();
 
