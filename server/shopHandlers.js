@@ -103,4 +103,4 @@ const deleteShop = async () => {
   }
 };
 
-module.exports = { getShop, createshop, modifyShop, deleteShop };
+module.exports = { getShop, createShop, modifyShop, deleteShop };

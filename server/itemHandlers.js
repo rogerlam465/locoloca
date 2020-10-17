@@ -26,20 +26,25 @@ const dbClose = () => {
   console.log("db disconnected, for the glory of Queen and country");
 }
 
-// router.get('/api/shop', getShop);
-// router.post('/api/shop', createShop);
-// router.patch('/api/shop', modifyShop);
-// router.delete('/api/shop', deleteShop);
+// router.get('/api/item', getItem);
+// router.post('/api/item', createItem);
+// router.patch('/api/item', modifyItem);
+// router.delete('/api/item', deleteItem);
 
-const getItem = async () => {
+const getItem = async (req, res) => {
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
+    // currently this fetches all items. Later we'll want to just find
+    // one item by its _id
+
     let r = await db.collection("items").find().toArray();
 
     console.log(r);
+
+    res.status(200).json({ status: 200, data: r, message: "TARGET LOCATED." });
 
     dbClose();
 
@@ -103,4 +108,4 @@ const deleteItem = async () => {
   }
 };
 
-module.exports = { getShop, createshop, modifyShop, deleteShop };
+module.exports = { getItem, createItem, modifyItem, deleteItem };

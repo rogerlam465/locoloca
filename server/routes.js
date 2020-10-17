@@ -1,9 +1,9 @@
 const router = require("express").Router();
 
 const { getUser, createUser, modifyUser, deleteUser } = require('./userHandlers');
-const { getCart, modifyCart, clearCart } = require('./cartHandlers');
+// const { getCart, modifyCart, clearCart } = require('./cartHandlers');
 const { getShop, createShop, modifyShop, deleteShop } = require('./shopHandlers');
-const { getItem, createItem, updateItem, deleteItem } = require('./itemHandlers');
+const { getItem, createItem, modifyItem, deleteItem } = require('./itemHandlers');
 
 // TODO:
 
@@ -24,9 +24,9 @@ router.delete('/api/user', deleteUser);
 
 // cart management routes
 
-router.get('/api/user/cart', getCart);
-router.patch('/api/user/cart', modifyCart);
-router.delete('/api/user/cart', clearCart);
+// router.get('/api/user/cart', getCart);
+// router.patch('/api/user/cart', modifyCart);
+// router.delete('/api/user/cart', clearCart);
 
 // store management routes
 
@@ -38,6 +38,8 @@ router.delete('/api/shop', deleteShop);
 // item management routes
 
 router.get('/api/item', getItem);
-router.post('/api/store', createItem);
-router.patch('/api/item', updateItem);
+router.post('/api/item', createItem);
+router.patch('/api/item', modifyItem);
 router.delete('/api/item', deleteItem);
+
+module.exports = router;

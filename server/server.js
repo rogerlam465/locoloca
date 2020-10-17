@@ -3,7 +3,7 @@ const morgan = require('morgan');
 
 const PORT = 7000;
 
-var app = express();
+let app = express();
 
 app.use(express.json());
 app.use(morgan('dev'));
