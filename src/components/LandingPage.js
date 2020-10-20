@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const LandingPage = () => {
@@ -13,11 +8,19 @@ const LandingPage = () => {
       <Content>
         <h1>This is the landing page.</h1>
         <p>What experience do you want to see?</p>
+
         <ButtonWrapper>
-          <ExperienceButton>Shop Experience</ExperienceButton>
-          <ExperienceButton>Courier Experience</ExperienceButton>
-          <ExperienceButton>Shopper Experience</ExperienceButton>
+          <Link to="/shop">
+            <ExperienceButton>Shop Experience</ExperienceButton>
+          </Link>
+          <Link to="/courier">
+            <ExperienceButton>Courier Experience</ExperienceButton>
+          </Link>
+          <Link to="/shopper">
+            <ExperienceButton>Shopper Experience</ExperienceButton>
+          </Link>
         </ButtonWrapper>
+
       </Content>
     </Wrapper>
   );
@@ -40,10 +43,15 @@ const Content = styled.div`
   margin: 30px;
 `;
 
-const ButtonWrapper = styled.div`
+const ButtonWrapper = styled.ul`
   display: flex;
+  padding: 0;
 `;
 
-const ExperienceButton = styled.button`
+const ExperienceButton = styled.li`
   margin-right: 10px;
+  list-style-type: none;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px grey solid;
 `;
