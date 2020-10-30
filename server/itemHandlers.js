@@ -54,17 +54,19 @@ const getItem = async (req, res) => {
   }
 };
 
-const createItem = async () => {
+const createItem = async (req, res) => {
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    let r = await db.collection("items").find().toArray();
+    console.log(req.body);
 
-    console.log(r);
+    let r = await db.collection("items").insertOne(req.body)
 
     dbClose();
+
+    res.status(201).json({ status: 201, message: "Care package delivered." })
 
   } catch (err) {
     console.log(err);

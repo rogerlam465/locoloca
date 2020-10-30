@@ -5,6 +5,11 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
   }
+
+  th {
+    padding: 5px 20px 5px 0;
+  }
+
 `;
 
 export default GlobalStyle;

@@ -15,7 +15,7 @@ let client;
 
 const dbConnect = async () => {
   try {
-    client = MongoClient(MONGO_URI, options0);
+    client = MongoClient(MONGO_URI, options);
     await client.connect();
 
     console.log("connected!");
@@ -57,7 +57,11 @@ const createUser = async (req, res) => {
 
     const db = client.db("locoloca");
 
+    let r = await db.collection("users").insertOne(req.body)
+
     dbClose();
+
+    res.status(201).json({ status: 201, message: "Care package delivered." })
 
   } catch (err) {
     console.log(err);

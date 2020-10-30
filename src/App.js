@@ -6,6 +6,7 @@ import LandingPage from './components/LandingPage';
 import ShopLanding from './components/ShopLanding';
 import CourierLanding from './components/CourierLanding';
 import ShopperLanding from './components/ShopperLanding';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
       <Router>
         <div>
           <Switch>
-            <Route path="/shop">
+            {/* Top level routes */}
+            <Route path="/shop/">
               <ShopLanding />
             </Route>
             <Route path="/courier">
@@ -23,9 +25,13 @@ function App() {
             <Route path="/shopper">
               <ShopperLanding />
             </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
             <Route exact path="/">
               <LandingPage />
             </Route>
+
           </Switch>
         </div>
       </Router>

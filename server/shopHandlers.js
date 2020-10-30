@@ -26,12 +26,12 @@ const dbClose = () => {
   console.log("db disconnected, for the glory of Queen and country");
 }
 
-// router.get('/api/shop', getShop);
-// router.post('/api/shop', createShop);
-// router.patch('/api/shop', modifyShop);
-// router.delete('/api/shop', deleteShop);
+// DONE - router.get('/api/shop', getShop);
+// DONE - router.post('/api/shop', createShop);
+// TODO - router.patch('/api/shop', modifyShop);
+// TODO - router.delete('/api/shop', deleteShop);
 
-const getShop = async () => {
+const getShop = async (req, res) => {
   try {
     await dbConnect();
 
@@ -39,7 +39,7 @@ const getShop = async () => {
 
     let r = await db.collection("shops").find().toArray();
 
-    console.log(r);
+    res.status(200).json({ status: 200, message: "Care package acquired.", data: r });
 
     dbClose();
 
@@ -49,17 +49,20 @@ const getShop = async () => {
   }
 };
 
-const createShop = async () => {
+const createShop = async (req, res) => {
+
+  console.log(req.body);
+
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    let r = await db.collection("shops").find().toArray();
-
-    console.log(r);
+    let r = await db.collection("shops").insertOne(req.body);
 
     dbClose();
+
+    res.status(201).json({ status: 201, message: "Care package delivered." })
 
   } catch (err) {
     console.log(err);

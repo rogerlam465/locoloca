@@ -19,6 +19,9 @@ const LandingPage = () => {
           <Link to="/shopper">
             <ExperienceButton>Shopper Experience</ExperienceButton>
           </Link>
+          <Link to="/login">
+            <ExperienceButton>Log in</ExperienceButton>
+          </Link>
         </ButtonWrapper>
 
       </Content>
