@@ -1,35 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import {
+  requestUserData,
+  receiveUserData,
+  receiveUserDataError,
+} from '../actions';
 
 const Login = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
-  const [userLoadState, setUserLoadState] = useState(null);
+  const userLoadState = useSelector((state) => state.user.status);
 
   // this feels like it's going to cause a race condition
   // with the fetch. sigh.
 
   useEffect(() => {
-    if (userLoadState === 'loaded') {
+    if (userLoadState === 'complete') {
       history.push("/");
     }
   }, [userLoadState]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUserLoadState('pending');
+    dispatch(requestUserData());
+    // setUserLoadState('pending');
 
     await fetch('/api/user/')
       .then(res => {
         return res.json();
       })
       .then(json => {
-        setUserLoadState('loaded');
-        return json["data"][0];
+        dispatch(receiveUserData(json["data"][0]));
+        // setUserLoadState('loaded');
+        // return json["data"][0];
       })
       .catch(error => {
-        setUserLoadState('error');
+        dispatch(receiveUserDataError());
+        // setUserLoadState('error');
         console.log(error);
       });
   };
