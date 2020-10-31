@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import GlobalStyle from './components/GlobalStyles';
-import LandingPage from './components/LandingPage';
+import Header from './components/Header';
 import ShopLanding from './components/ShopLanding';
 import CourierLanding from './components/CourierLanding';
 import ShopperLanding from './components/ShopperLanding';
@@ -13,6 +13,7 @@ function App() {
     <div>
       <GlobalStyle />
       <Router>
+        <Header />
         <div>
           <Switch>
             {/* Top level routes */}
@@ -22,14 +23,11 @@ function App() {
             <Route path="/courier">
               <CourierLanding />
             </Route>
-            <Route path="/shopper">
-              <ShopperLanding />
-            </Route>
             <Route path="/login">
               <Login />
             </Route>
             <Route exact path="/">
-              <LandingPage />
+              <ShopperLanding />
             </Route>
 
           </Switch>

@@ -30,7 +30,7 @@ const EditItem = () => {
 
     const data = JSON.stringify(dataObj);
 
-    // todo - this still needs to save the current store
+    // todo - this still needs to save the current shop
 
     fetch('/api/item', {
       method: 'POST',

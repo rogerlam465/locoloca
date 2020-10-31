@@ -41,7 +41,9 @@ const getUser = async (req, res) => {
 
     const db = client.db("locoloca");
 
-    await db.collection("users").find();
+    let user = await db.collection("users").find().toArray();
+
+    res.status(200).json({ status: 200, message: "I fight for the users!", data: user })
 
     dbClose();
 

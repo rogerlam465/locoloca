@@ -7,8 +7,14 @@ import styled from 'styled-components';
 
 const ShopperLanding = () => {
   return (
-    <h1>Khajit has wares if you have coin.</h1>
+    <Wrapper>
+      <h1>Khajit has wares if you have coin.</h1>
+    </Wrapper>
   );
 };
 
 export default ShopperLanding;
+
+const Wrapper = styled.div`
+  margin: 30px;
+`;
