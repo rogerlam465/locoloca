@@ -7,18 +7,26 @@ const Login = () => {
 
   const [userLoadState, setUserLoadState] = useState(null);
 
+  // this feels like it's going to cause a race condition
+  // with the fetch. sigh.
+
+  useEffect(() => {
+    if (userLoadState === 'loaded') {
+      history.push("/");
+    }
+  }, [userLoadState]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUserLoadState('pending');
 
-    let userData = await fetch('/api/user/')
+    await fetch('/api/user/')
       .then(res => {
         return res.json();
       })
       .then(json => {
         setUserLoadState('loaded');
         return json["data"][0];
-        history.push("/");
       })
       .catch(error => {
         setUserLoadState('error');

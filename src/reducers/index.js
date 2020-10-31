@@ -1,13 +1,6 @@
-const initialState = {};
+import { combineReducers } from "redux";
 
-export default function inventoryReducer(state = initialState, action) {
-  switch (action.type) {
-    case 'ADD_ITEM':
-      return {
-        ...state,
+import inventory from './inventory-reducer';
+import user from './user-reducer';
 
-      }
-    default:
-      return state;
-  }
-}
+export default combineReducers({ inventory, user });
