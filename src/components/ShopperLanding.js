@@ -8,6 +8,11 @@ import styled from 'styled-components';
 // this turns out to be pretty complicated. There doesn't
 // seem to be an API for geocoding within a radius.
 
+// HAHA LIES THERE'S ONE
+
+// todo - add grid
+// todo - capture user location (search bar or by web api)
+// todo - customize grid according to location
 
 const ShopperLanding = () => {
   return (

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -15,18 +14,31 @@ import { Link } from 'react-router-dom';
 
 const ShopItemGrid = () => {
   const userShop = useSelector((state) => state.user.userData.shop);
-  const [getItemsState, setGetItemsState] = useState(null);
+  const [getItemsState, setGetItemsState] = useState("idle");
+
+  let itemData = [];
+
+  // philosophically, it doesn't make sense to store the list of items
+  // within state. It's not a state. It's an arbitrarily sized chunk of data.
+  // So I guess what we want is to just store it. But we also want a loading
+  // indicator.
 
   useEffect(() => {
     setGetItemsState("loading");
 
-    console.log(userShop);
-
     async function fetchData() {
       let r = await fetch("/api/item/all/" + userShop)
         .then(res => res.json())
-        .then(json => setGetItemsState(json.data))
-        .catch(err => { console.log(err) });
+        .then(json => {
+
+          itemData = json.data;
+          setGetItemsState("done");
+          console.log(getItemsState);
+        })
+        .catch(err => {
+          setGetItemsState("error");
+          console.log(err);
+        });
       return r;
     };
 
@@ -37,18 +49,32 @@ const ShopItemGrid = () => {
 
   return (
     <Wrapper>
-      <h1>this is where the shop items go.</h1>
+      <h1>these are the items you're selling.</h1>
       <Link to="/item/edit">
         <button>Add an item</button>
       </Link>
 
-      <table>
-        <tr>
-          <th>Product Name</th>
-          <th># in Stock</th>
-          <th># of Orders</th>
-        </tr>
-      </table>
+      {(getItemsState === "loading") &&
+        <h2>Loading...</h2>
+      }
+      {(getItemsState === "done") &&
+        <table>
+          <thead>
+            <td>Product Name</td>
+            <td># in Stock</td>
+            <td>Active Orders</td>
+            <td>Sold</td>
+          </thead>
+          <tbody>
+            <tr>
+              <td>something</td>
+              <td>something</td>
+              <td>something</td>
+              <td>something</td>
+            </tr>
+          </tbody>
+        </table>
+      }
 
     </Wrapper>
   )
