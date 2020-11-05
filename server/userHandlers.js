@@ -2,6 +2,7 @@
 // should we abstract this out?
 
 const { MongoClient } = require('mongodb');
+const ObjectID = require('mongodb').ObjectID;
 
 require("dotenv").config();
 const { MONGO_URI } = process.env;
@@ -76,6 +77,16 @@ const modifyUser = async (req, res) => {
     await dbConnect();
 
     const db = client.db("locoloca");
+
+    let userId = ObjectID(req.body.id);
+
+    console.log("userId is", userId);
+
+    let r1 = await db.collection("users").findOne({ _id: userId });
+
+    let r = await db.collection("users").updateOne({ _id: userId }, { $set: { "shop": req.body.shop } });
+
+    console.log(r1);
 
     dbClose();
 

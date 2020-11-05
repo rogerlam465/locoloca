@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -7,9 +7,21 @@ import { Link } from 'react-router-dom';
 // clicking on each product would open up the item view
 // which would have the edit view by default
 
-// search would be cool too, but I don't know if I care about that
+// search would be cool too, but I don't know if I care about
+// that right now
+
 
 const ShopItemGrid = () => {
+
+  const [getItemsState, setGetItemsState] = useState("idle");
+
+  useEffect(async () => {
+    setGetItemsState("loading");
+
+    let r = await fetch("/api/item/all");
+  }, [])
+
+
   return (
     <Wrapper>
       <h1>this is where the shop items go.</h1>

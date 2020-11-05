@@ -3,7 +3,12 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import GlobalStyle from './components/GlobalStyles';
 import Header from './components/Header';
+
+// shop components
+
 import ShopLanding from './components/ShopLanding';
+import ShopCreate from './components/shop/ShopCreate';
+
 import CourierLanding from './components/CourierLanding';
 import ShopperLanding from './components/ShopperLanding';
 import Login from './components/Login';
@@ -17,18 +22,29 @@ function App() {
         <div>
           <Switch>
             {/* Top level routes */}
-            <Route path="/shop/">
-              <ShopLanding />
-            </Route>
+
             <Route path="/courier">
               <CourierLanding />
             </Route>
             <Route path="/login">
               <Login />
             </Route>
+
+            {/* Shop related routes */}
+
+            <Route path="/shop/create">
+              <ShopCreate />
+            </Route>
+
+            <Route path="/shop/">
+              <ShopLanding />
+            </Route>
+
+            {/* home route */}
             <Route exact path="/">
               <ShopperLanding />
             </Route>
+
 
           </Switch>
         </div>

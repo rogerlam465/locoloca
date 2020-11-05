@@ -1,14 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 const EditItem = () => {
   const history = useHistory();
+  const userShop = useSelector((state) => state.user.userData.shop);
 
   const [itemLoad, setItemLoad] = useState(null);
   const form = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (itemLoad === "saved") {
       history.push("/shop");
     }
@@ -21,7 +23,9 @@ const EditItem = () => {
 
     const dataHolder = new FormData(form.current);
 
-    const dataObj = {};
+    const dataObj = {
+      "shop": userShop,
+    };
 
     for (let pair of dataHolder.entries()) {
       let holder = pair[0];
@@ -30,7 +34,7 @@ const EditItem = () => {
 
     const data = JSON.stringify(dataObj);
 
-    // todo - this still needs to save the current shop
+    // todo - some way to save images
 
     fetch('/api/item', {
       method: 'POST',
@@ -58,35 +62,25 @@ const EditItem = () => {
         <h2>Item Info</h2>
 
         <label htmlFor="itemName">Item Name</label>
-        <input type="text" id="itemName" name="itemName" />
+        <ItemInput type="text" id="itemName" name="itemName" required />
 
         <label htmlFor="itemDesc">Item Description</label>
-        <textarea id="itemDesc" name="itemDesk" rows="3" cols="50"></textarea>
+        <ItemTextarea id="itemDesc" name="itemDesk" rows="3" cols="50" required ></ItemTextarea>
 
         <label htmlFor="itemManufacturer">Item Manufacturer</label>
-        <input type="text" id="itemManufacturer" name="itemManufacturer" />
+        <ItemInput type="text" id="itemManufacturer" name="itemManufacturer" required />
+
+        <label htmlFor="itemStock"># of items in stock</label>
+        <ItemInput type="number" id="itemStock" name="itemStock" required />
 
         <h2>Package Size</h2>
 
-        <p>All measurements in centimetres and grams, please.</p>
-        <p>Packages may not exceed 40 cm in any dimension, nor exceed 3 kg in weight.</p>
+        <p>Your items can be up to the size of a shoebox (35 x 25 x 15 cm), and can weigh no more than 3 kg. Does this item fit the parameters? Note that our drivers can refuse to take your item, and you <em>will</em> be charged for pickup.</p>
 
-        <label htmlFor="pkgWidth">Width</label>
-        <input type="number" id="pkgWidth" name="pkgWidth" />
-
-        <label htmlFor="pkgLength">Length</label>
-        <input type="number" id="pkgLength" name="pkgLength" />
-
-        <label htmlFor="pkgHeight">Height</label>
-        <input type="number" id="pkgHeight" name="pkgHeight" />
-
-        <label htmlFor="pkgWeight">Weight</label>
-        <input type="number" id="pkgWeight" name="pkgWeight" />
-
-        {/* eventually it would be cool to have multiple warehouses for each items. We're not there yet, though. */}
-
-        <label htmlFor="itemStock"># of items in stock</label>
-        <input type="number" id="itemStock" name="itemStock" />
+        <div>
+          <ItemInput type="checkbox" id="pkgSizeCertify" name="pkgSizeCertify" required />
+          <label for="pkgSizeCertify">Do you certify that your item, including the packaging, meets delivery guidelines?</label>
+        </div>
 
         <button>Submit</button>
 
@@ -106,4 +100,12 @@ const ItemForm = styled.form`
   display: flex;
   flex-direction: column;
   width: 60%;
+`;
+
+const ItemInput = styled.input`
+  margin-bottom: 10px;
+`;
+
+const ItemTextarea = styled.textarea`
+  margin-bottom: 10px;
 `;

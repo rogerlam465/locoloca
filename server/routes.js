@@ -4,6 +4,7 @@ const { getUser, createUser, modifyUser, deleteUser } = require('./userHandlers'
 // const { getCart, modifyCart, clearCart } = require('./cartHandlers');
 const { getShop, createShop, modifyShop, deleteShop } = require('./shopHandlers');
 const { getItem, createItem, modifyItem, deleteItem } = require('./itemHandlers');
+const { getOrder, createOrder, modifyOrder, deleteOrder } = require('./orderHandlers');
 
 // TODO:
 
@@ -41,5 +42,12 @@ router.get('/api/item', getItem);
 router.post('/api/item', createItem);
 router.patch('/api/item', modifyItem);
 router.delete('/api/item', deleteItem);
+
+// order management routes
+
+// router.get('/api/order', getOrder);
+// router.post('/api/order', createOrder);
+// router.patch('/api/order', modifyOrder);
+// router.delete('/api/order', deleteOrder);
 
 module.exports = router;

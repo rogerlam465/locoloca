@@ -26,20 +26,24 @@ const dbClose = () => {
   console.log("db disconnected, for the glory of Queen and country");
 }
 
-// DONE - router.get('/api/shop', getShop);
-// DONE - router.post('/api/shop', createShop);
-// TODO - router.patch('/api/shop', modifyShop);
-// TODO - router.delete('/api/shop', deleteShop);
+// router.get('/api/order', getorder);
+// router.post('/api/order', createorder);
+// router.patch('/api/order', modifyorder);
+// router.delete('/api/order', deleteorder);
 
-const getShop = async (req, res) => {
+const getOrder = async (req, res) => {
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    let r = await db.collection("shops").find().toArray();
+    // should pull all orders related to one seller
 
-    res.status(200).json({ status: 200, message: "Care package acquired.", data: r });
+    let r = await db.collection("orders").find().toArray();
+
+    console.log(r);
+
+    res.status(200).json({ status: 200, data: r, message: "TARGET LOCATED." });
 
     dbClose();
 
@@ -49,22 +53,19 @@ const getShop = async (req, res) => {
   }
 };
 
-const createShop = async (req, res) => {
-
-  console.log(req.body);
-
+const createOrder = async (req, res) => {
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    let r = await db.collection("shops").insertOne(req.body);
+    console.log(req.body);
 
-    console.log(r.insertedId);
+    let r = await db.collection("orders").insertOne(req.body)
 
     dbClose();
 
-    res.status(201).json({ status: 201, message: "Care package delivered.", data: r.insertedId });
+    res.status(201).json({ status: 201, message: "Care package delivered." })
 
   } catch (err) {
     console.log(err);
@@ -72,13 +73,13 @@ const createShop = async (req, res) => {
   }
 };
 
-const modifyShop = async () => {
+const modifyOrder = async () => {
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    let r = await db.collection("shops").find().toArray();
+    let r = await db.collection("orders").find().toArray();
 
     console.log(r);
 
@@ -90,13 +91,13 @@ const modifyShop = async () => {
   }
 };
 
-const deleteShop = async () => {
+const deleteOrder = async () => {
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    let r = await db.collection("shops").find().toArray();
+    let r = await db.collection("orders").find().toArray();
 
     console.log(r);
 
@@ -108,4 +109,4 @@ const deleteShop = async () => {
   }
 };
 
-module.exports = { getShop, createShop, modifyShop, deleteShop };
+module.exports = { getOrder, createOrder, modifyOrder, deleteOrder };

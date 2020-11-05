@@ -5,6 +5,10 @@ import styled from 'styled-components';
 // just shows all items that can be delivered to your address
 // no maps, just a list of items
 
+// this turns out to be pretty complicated. There doesn't
+// seem to be an API for geocoding within a radius.
+
+
 const ShopperLanding = () => {
   return (
     <Wrapper>

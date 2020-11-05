@@ -1,11 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 // icons, forcement
 
-import { GrDeliver, GrLogin, GrCart, GrHome } from "react-icons/gr";
+import { GrDeliver, GrLogin, GrCart, GrHome, GrLogout } from "react-icons/gr";
 import { BiStore } from "react-icons/bi";
+
+// actions
+
+import { userLogout } from '../actions';
 
 // this should ideally pull from redux upon 'login'
 // upon login:
@@ -14,24 +20,47 @@ import { BiStore } from "react-icons/bi";
 // pull courier deets (if existent)
 
 const Header = () => {
+  const userData = useSelector((state) => state.user.userData);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleSubmit = () => {
+    dispatch(userLogout());
+    history.push("/");
+  };
+
   return (
     <Wrapper>
-      <span>Hi there.</span>
+      {userData &&
+        <span>Hi there, {userData.firstName}!</span>
+      }
+      {!userData &&
+        <span>Hi there.</span>
+      }
       <UIWrapper>
         <MenuList>
           <Link to="/">
             <MenuItems><GrHome /></MenuItems>
           </Link>
-          <Link to="/shop">
-            <MenuItems><BiStore /></MenuItems>
-          </Link>
-          <Link to="/courier">
-            <MenuItems><GrDeliver /></MenuItems>
-          </Link>
+          {userData &&
+            <>
+              <Link to="/shop">
+                <MenuItems><BiStore /></MenuItems>
+              </Link>
+              <Link to="/courier">
+                <MenuItems><GrDeliver /></MenuItems>
+              </Link>
+            </>
+          }
           <MenuItems><GrCart /></MenuItems>
-          <Link to="/login">
-            <MenuItems><GrLogin /></MenuItems>
-          </Link>
+          {userData &&
+            <MenuItems onClick={handleSubmit}><GrLogout /></MenuItems>
+          }
+          {!userData &&
+            <Link to="/login">
+              <MenuItems><GrLogin /></MenuItems>
+            </Link>
+          }
         </MenuList>
       </UIWrapper>
     </Wrapper>
