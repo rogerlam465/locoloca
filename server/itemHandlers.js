@@ -1,4 +1,5 @@
 const { MongoClient } = require('mongodb');
+var ObjectID = require('mongodb').ObjectID
 
 require("dotenv").config();
 const { MONGO_URI } = process.env;
@@ -38,12 +39,7 @@ const getItem = async (req, res) => {
 
     const db = client.db("locoloca");
 
-    // currently this fetches all items. Later we'll want to just find
-    // one item by its _id
-
     let r = await db.collection("items").find().toArray();
-
-    console.log(r);
 
     res.status(200).json({ status: 200, data: r, message: "TARGET LOCATED." });
 
@@ -55,7 +51,7 @@ const getItem = async (req, res) => {
   }
 };
 
-const getAllItem = async (req, res) => {
+const getAllItems = async (req, res) => {
   try {
     await dbConnect();
 
@@ -64,7 +60,13 @@ const getAllItem = async (req, res) => {
     // currently this fetches all items. Later we'll want to just find
     // one item by its _id
 
-    let r = await db.collection("items").find().toArray();
+    let r = [];
+
+    if (req.params.id) {
+      r = await db.collection("items").find({ "shop": req.params.id }).toArray();
+    } else {
+      r = await db.collection("items").find().toArray();
+    };
 
     console.log(r);
 
@@ -134,4 +136,4 @@ const deleteItem = async () => {
   }
 };
 
-module.exports = { getItem, createItem, modifyItem, deleteItem };
+module.exports = { getItem, getAllItems, createItem, modifyItem, deleteItem };

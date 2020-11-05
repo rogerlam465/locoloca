@@ -30,8 +30,6 @@ const ShopLanding = () => {
   // if there is a shop, we need to fetch the shop data and go full into
   // shop management
 
-  console.log(userData);
-
   if (!userData) {
     history.push("/");
   }

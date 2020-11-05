@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -12,13 +14,24 @@ import { Link } from 'react-router-dom';
 
 
 const ShopItemGrid = () => {
+  const userShop = useSelector((state) => state.user.userData.shop);
+  const [getItemsState, setGetItemsState] = useState(null);
 
-  const [getItemsState, setGetItemsState] = useState("idle");
-
-  useEffect(async () => {
+  useEffect(() => {
     setGetItemsState("loading");
 
-    let r = await fetch("/api/item/all");
+    console.log(userShop);
+
+    async function fetchData() {
+      let r = await fetch("/api/item/all/" + userShop)
+        .then(res => res.json())
+        .then(json => setGetItemsState(json.data))
+        .catch(err => { console.log(err) });
+      return r;
+    };
+
+    fetchData();
+
   }, [])
 
 
