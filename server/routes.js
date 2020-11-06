@@ -5,6 +5,7 @@ const { getUser, createUser, modifyUser, deleteUser } = require('./userHandlers'
 const { getShop, createShop, modifyShop, deleteShop } = require('./shopHandlers');
 const { getItem, getAllItems, createItem, modifyItem, deleteItem } = require('./itemHandlers');
 const { getOrder, createOrder, modifyOrder, deleteOrder } = require('./orderHandlers');
+const { getPostcodes } = require('./postcodeHandlers');
 
 // TODO:
 
@@ -50,5 +51,9 @@ router.delete('/api/item', deleteItem);
 // router.post('/api/order', createOrder);
 // router.patch('/api/order', modifyOrder);
 // router.delete('/api/order', deleteOrder);
+
+// postcode routes
+
+router.get('/api/postcode/:postcode', getPostcodes);
 
 module.exports = router;

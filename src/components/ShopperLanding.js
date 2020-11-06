@@ -13,11 +13,34 @@ import styled from 'styled-components';
 // todo - add grid
 // todo - capture user location (search bar or by web api)
 // todo - customize grid according to location
+// todo - build validator for postcode input (stretch)
 
 const ShopperLanding = () => {
+
+  let postcodes = [];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let targetPostcode = e.target.location.value;
+
+    let r = await fetch('/api/postcode/' + targetPostcode)
+      .then(res => res.json())
+      .then(json => {
+        postcodes = json;
+        // modify state for loading
+      })
+      .catch(err => console.log(err));
+  }
+
   return (
     <Wrapper>
-      <h1>Khajit has wares if you have coin.</h1>
+      <h1>Shop Local!</h1>
+      <p>Delivery in two days!</p>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="location">Enter the first half of your postal code to get started:</label>
+        <input type="text" maxLength="3" name="location" id="location" placeholder="A1B"></input>
+        <button>Go!</button>
+      </form>
     </Wrapper>
   );
 };
