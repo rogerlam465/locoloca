@@ -1,47 +1,80 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-
-// this should be the easiest UI to build
-// just shows all items that can be delivered to your address
-// no maps, just a list of items
-
-// this turns out to be pretty complicated. There doesn't
-// seem to be an API for geocoding within a radius.
-
-// HAHA LIES THERE'S ONE
 
 // todo - add grid
 // todo - capture user location (search bar or by web api)
 // todo - customize grid according to location
 // todo - build validator for postcode input (stretch)
 
+// should we... just try to grab location automatically?
+// then display the search bar if nothing shows?
+
+// for some reason, getCurrentPosition doesn't work well on
+// the tower. Let's leave it until after we deploy, I guess.
+// irksome, but whatcha gonna do.
+
 const ShopperLanding = () => {
 
   let postcodes = [];
 
+  // why are we setting state here? It's not like we're gonna
+  // use it... or are we?
+
+  const [postcodeState, setPostcodeState] = useState("idle");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let targetPostcode = e.target.location.value;
 
-    let r = await fetch('/api/postcode/' + targetPostcode)
+    setPostcodeState("loading");
+
+    let targetPostcode;
+
+    const setPostcode = (position) => {
+      console.log("what", position);
+    }
+
+    if (e.target.location.value === 3) {
+      console.log("true");
+      targetPostcode = e.target.location.value;
+    } else {
+      console.log("false");
+      navigator.geolocation.getCurrentPosition(setPostcode);
+    }
+
+    // this currently returns target postcodes. This is probably not ideal.
+    // this should actually return the products themselves.
+    // all the searches should actually happen in the backend.
+
+    await fetch('/api/postcode/' + targetPostcode)
       .then(res => res.json())
       .then(json => {
         postcodes = json;
-        // modify state for loading
+        setPostcodeState("success");
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        setPostcodeState("error");
+      });
   }
 
   return (
     <Wrapper>
       <h1>Shop Local!</h1>
-      <p>Delivery in two days!</p>
+      <p>The products below are available within a 20km radius of your location; this way, we can ensure 2 day delivery!</p>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="location">Enter the first half of your postal code to get started:</label>
+        <label htmlFor="location">Enter the first half of your postal code to get started, or leave it blank and we'll try to find you automagically!</label>
         <input type="text" maxLength="3" name="location" id="location" placeholder="A1B"></input>
         <button>Go!</button>
       </form>
+      {
+        postcodeState === "loading" &&
+        <h2>Loading...</h2>
+      }
+      {postcodeState === "success" &&
+        <h2>Data found!</h2>
+      }
     </Wrapper>
+
   );
 };
 
