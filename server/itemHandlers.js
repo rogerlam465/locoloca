@@ -127,6 +127,7 @@ const getAllItemsByPostCode = async (req, res) => {
     }
 
     // grab all items from the array of seller IDs
+    // this is weirdly slow. Not sure where the slowdown is, but as long as it works...
 
     let allItems = await db.collection("items").find({ shop: { $in: sanitizedShopIds } }).toArray();
 

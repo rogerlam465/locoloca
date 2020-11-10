@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import ItemGrid from './buyer/ItemGrid';
+
 // todo - add grid
-// todo - capture user location (search bar or by web api)
+// todo - capture user location (search bar or by web api or by user profile)
 // todo - customize grid according to location
 // todo - build validator for postcode input (stretch)
 
@@ -15,7 +17,7 @@ import styled from 'styled-components';
 
 const ShopperLanding = () => {
 
-  let postcodes = [];
+  let itemData = [];
 
   // why are we setting state here? It's not like we're gonna
   // use it... or are we?
@@ -29,12 +31,14 @@ const ShopperLanding = () => {
 
     let targetPostcode;
 
+    // this doesn't work right now
+
     const setPostcode = (position) => {
       console.log("what", position);
     }
 
-    if (e.target.location.value === 3) {
-      console.log("true");
+    if (e.target.location.value.length === 3) {
+      console.log("true", e.target.location.value);
       targetPostcode = e.target.location.value;
     } else {
       console.log("false");
@@ -48,7 +52,8 @@ const ShopperLanding = () => {
     await fetch('/api/item/postcode/' + targetPostcode)
       .then(res => res.json())
       .then(json => {
-        postcodes = json;
+        itemData = json.data;
+        console.log("itemData", itemData);
         setPostcodeState("success");
       })
       .catch(err => {
@@ -71,7 +76,7 @@ const ShopperLanding = () => {
         <h2>Loading...</h2>
       }
       {postcodeState === "success" &&
-        <h2>Data found!</h2>
+        <ItemGrid itemData={itemData} />
       }
     </Wrapper>
 
