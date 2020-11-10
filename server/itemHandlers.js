@@ -117,7 +117,8 @@ const getAllItemsByPostCode = async (req, res) => {
       shopIdHolder = newArray;
     }
 
-    // let shopFind = await db.collection("shops").distinct("_id", { postcode: { $regex: postcodes, $options: 'mi' } });
+    // I don't know what Mongo gives back by default, but I don't care for it.
+    // forcing them to be strings.
 
     let sanitizedShopIds = [];
 
@@ -130,6 +131,8 @@ const getAllItemsByPostCode = async (req, res) => {
     let allItems = await db.collection("items").find({ shop: { $in: sanitizedShopIds } }).toArray();
 
     dbClose();
+
+    // return everything. good god.
 
     res.status(200).json({ status: 200, message: "Care package acquired.", data: allItems });
 

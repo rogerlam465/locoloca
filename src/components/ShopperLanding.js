@@ -45,7 +45,7 @@ const ShopperLanding = () => {
     // this should actually return the products themselves.
     // all the searches should actually happen in the backend.
 
-    await fetch('/api/postcode/' + targetPostcode)
+    await fetch('/api/item/postcode/' + targetPostcode)
       .then(res => res.json())
       .then(json => {
         postcodes = json;
