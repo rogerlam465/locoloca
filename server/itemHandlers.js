@@ -107,13 +107,27 @@ const getAllItemsByPostCode = async (req, res) => {
 
     const db = client.db("locoloca");
 
-    // this returns only the seller IDs in the format of an array assuming one postcode
-    // this is obviously not optimal.
-    let shopFind = await db.collection("shops").distinct("_id", { postcode: { $regex: postcodes, $options: 'mi' } });
+    let shopIdHolder = [];
+
+    // this returns an array of seller IDs related to the targeted postcodes
+
+    for (let i = 0; i < postcodes.length; i++) {
+      shopFind = await db.collection("shops").distinct("_id", { postcode: { $regex: postcodes[i], $options: 'mi' } });
+      newArray = shopIdHolder.concat(shopFind);
+      shopIdHolder = newArray;
+    }
+
+    // let shopFind = await db.collection("shops").distinct("_id", { postcode: { $regex: postcodes, $options: 'mi' } });
+
+    let sanitizedShopIds = [];
+
+    for (const property in shopIdHolder) {
+      sanitizedShopIds.push(String(shopIdHolder[property]));
+    }
 
     // grab all items from the array of seller IDs
 
-    let allItems = await db.collection("items").find({ shop: { $in: shopFind } }).toArray();
+    let allItems = await db.collection("items").find({ shop: { $in: sanitizedShopIds } }).toArray();
 
     dbClose();
 
