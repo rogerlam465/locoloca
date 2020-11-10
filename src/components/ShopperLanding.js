@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import ItemGrid from './buyer/ItemGrid';
@@ -19,10 +19,22 @@ const ShopperLanding = () => {
 
   let itemData = [];
 
-  // why are we setting state here? It's not like we're gonna
-  // use it... or are we?
-
   const [postcodeState, setPostcodeState] = useState("idle");
+  const [itemHolderState, setItemHolderState] = useState([]);
+
+  // this is incredibly stupid. Is there a better way to do this?
+  // The problem with the previous solution is that it would
+  // try to render the component using an itemData variable
+  // without having received the item data
+
+  // so we're using useEffect to force a re-render after validating
+  // that we actually have data
+
+  useEffect(() => {
+    if (itemHolderState.length > 0) {
+      setPostcodeState("success");
+    };
+  }, [itemHolderState, setItemHolderState]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,21 +57,16 @@ const ShopperLanding = () => {
       navigator.geolocation.getCurrentPosition(setPostcode);
     }
 
-    // this currently returns target postcodes. This is probably not ideal.
-    // this should actually return the products themselves.
-    // all the searches should actually happen in the backend.
-
-    await fetch('/api/item/postcode/' + targetPostcode)
+    itemData = await fetch('/api/item/postcode/' + targetPostcode)
       .then(res => res.json())
       .then(json => {
-        itemData = json.data;
-        console.log("itemData", itemData);
-        setPostcodeState("success");
+        setItemHolderState(json.data);
       })
       .catch(err => {
         console.log(err);
         setPostcodeState("error");
       });
+
   }
 
   return (
@@ -71,12 +78,11 @@ const ShopperLanding = () => {
         <input type="text" maxLength="3" name="location" id="location" placeholder="A1B"></input>
         <button>Go!</button>
       </form>
-      {
-        postcodeState === "loading" &&
+      {postcodeState === "loading" &&
         <h2>Loading...</h2>
       }
       {postcodeState === "success" &&
-        <ItemGrid itemData={itemData} />
+        <ItemGrid itemData={itemHolderState} />
       }
     </Wrapper>
 
