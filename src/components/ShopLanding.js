@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 // shop imports
@@ -30,7 +30,7 @@ const ShopLanding = () => {
   // if there is a shop, we need to fetch the shop data and go full into
   // shop management
 
-  if (!userData) {
+  if (typeof userData === undefined) {
     history.push("/");
   }
 

@@ -50,12 +50,12 @@ const Login = () => {
       <h1>Hi there! Please log in here.</h1>
       <LoginForm onSubmit={handleSubmit}>
         <FormSpacer>
-          <FormLabel for="emailAddress">Email Address</FormLabel>
+          <FormLabel htmlFor="emailAddress">Email Address</FormLabel>
           <input type="email" name="emailAddress"></input>
         </FormSpacer>
 
         <FormSpacer>
-          <FormLabel for="password">Password</FormLabel>
+          <FormLabel htmlFor="password">Password</FormLabel>
           <input type="password" name="password"></input>
         </FormSpacer>
 

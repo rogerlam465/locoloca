@@ -65,13 +65,16 @@ const EditItem = () => {
         <ItemInput type="text" id="itemName" name="itemName" required />
 
         <label htmlFor="itemDesc">Item Description</label>
-        <ItemTextarea id="itemDesc" name="itemDesk" rows="3" cols="50" required ></ItemTextarea>
+        <ItemTextarea id="itemDesc" name="itemDesc" rows="3" cols="50" required ></ItemTextarea>
 
         <label htmlFor="itemManufacturer">Item Manufacturer</label>
         <ItemInput type="text" id="itemManufacturer" name="itemManufacturer" required />
 
-        <label htmlFor="itemStock"># of items in stock</label>
-        <ItemInput type="number" id="itemStock" name="itemStock" required />
+        <label htmlFor="numInStock"># of items in stock</label>
+        <ItemInput type="number" id="numInStock" name="numInStock" required />
+
+        <label htmlFor="itemPrice">Item Price</label>
+        <ItemInput type="number" id="itemPrice" name="itemPrice" required />
 
         <h2>Package Size</h2>
 

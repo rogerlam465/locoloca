@@ -18,8 +18,6 @@ import ItemGrid from './buyer/ItemGrid';
 
 const ShopperLanding = () => {
 
-  let itemData = [];
-
   const [itemGrabState, setItemGrabState] = useState("idle");
   const [itemHolderState, setItemHolderState] = useState([]);
 
@@ -59,8 +57,6 @@ const ShopperLanding = () => {
     };
   }, [itemHolderState]);
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -79,16 +75,6 @@ const ShopperLanding = () => {
       console.log("false");
       navigator.geolocation.getCurrentPosition(setPostcode);
     }
-
-    // itemData = await fetch('/api/item/postcode/' + targetPostcode)
-    //   .then(res => res.json())
-    //   .then(json => {
-    //     setItemHolderState(json.data);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     setItemGrabState("error");
-    //   });
 
   }
 
@@ -116,4 +102,5 @@ export default ShopperLanding;
 
 const Wrapper = styled.div`
   margin: 30px;
+  width: 100%;
 `;

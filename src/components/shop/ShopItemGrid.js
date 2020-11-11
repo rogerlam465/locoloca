@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
+import SellerItem from './SellerItem';
+
 // this component should show the list of inventory items
 // ideally this would be presented as a list
 // clicking on each product would open up the item view
@@ -11,41 +13,38 @@ import { Link } from 'react-router-dom';
 // search would be cool too, but I don't know if I care about
 // that right now
 
-
 const ShopItemGrid = () => {
   const userShop = useSelector((state) => state.user.userData.shop);
   const [getItemsState, setGetItemsState] = useState("idle");
+  const [itemState, setItemState] = useState([]);
 
   let itemData = [];
 
-  // philosophically, it doesn't make sense to store the list of items
-  // within state. It's not a state. It's an arbitrarily sized chunk of data.
-  // So I guess what we want is to just store it. But we also want a loading
-  // indicator.
+  // I don't quite understand what's happening. setGetItemsState just doesn't work.
+  // we still receive the data in itemData. Just that the setter doesn't do the thing.
+
+  const fetchData = async (shopId) => {
+    await fetch('/api/item/all/' + shopId)
+      .then(res => res.json())
+      .then(json => {
+        setItemState(json.data);
+      })
+      .catch(err => {
+        console.log(err);
+        setItemState("error");
+      });
+  };
 
   useEffect(() => {
     setGetItemsState("loading");
-
-    async function fetchData() {
-      let r = await fetch("/api/item/all/" + userShop)
-        .then(res => res.json())
-        .then(json => {
-
-          itemData = json.data;
-          setGetItemsState("done");
-          console.log(getItemsState);
-        })
-        .catch(err => {
-          setGetItemsState("error");
-          console.log(err);
-        });
-      return r;
-    };
-
-    fetchData();
-
+    fetchData(userShop);
   }, [])
 
+  useEffect(() => {
+    if (itemState.length > 0) {
+      setGetItemsState("success");
+    };
+  }, [itemState]);
 
   return (
     <Wrapper>
@@ -57,23 +56,23 @@ const ShopItemGrid = () => {
       {(getItemsState === "loading") &&
         <h2>Loading...</h2>
       }
-      {(getItemsState === "done") &&
-        <table>
-          <thead>
-            <td>Product Name</td>
-            <td># in Stock</td>
-            <td>Active Orders</td>
-            <td>Sold</td>
-          </thead>
-          <tbody>
+      {(getItemsState === "success") &&
+        <>
+          <table>
+
             <tr>
-              <td>something</td>
-              <td>something</td>
-              <td>something</td>
-              <td>something</td>
+              <th>Product Name</th>
+              <th># in Stock</th>
+              <th>Active Orders</th>
+              <th>Sold</th>
             </tr>
-          </tbody>
-        </table>
+
+            {itemState.map(item => {
+              return <SellerItem data={item} />
+            })}
+
+          </table>
+        </>
       }
 
     </Wrapper>

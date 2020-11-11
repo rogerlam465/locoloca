@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import styled from 'styled-components';
 
 const Item = (props) => {
@@ -11,10 +10,12 @@ const Item = (props) => {
     heading = data.itemName.slice(0, 59) + "..."
     : heading = data.itemName;
 
-
   let newPrice = parseFloat(data.price).toFixed(2);
 
-  console.log(data);
+  const handleClick = () => {
+    // need a dispatch to add and remove items from the cart, I guess
+
+  };
 
   return (
     <Wrapper>
