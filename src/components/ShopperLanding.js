@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import ItemGrid from './buyer/ItemGrid';
 
-// todo - add grid
+// done - add grid
 // todo - capture user location (search bar or by web api or by user profile)
-// todo - customize grid according to location
+// done - customize grid according to location
 // todo - build validator for postcode input (stretch)
 
 // should we... just try to grab location automatically?
@@ -19,7 +20,7 @@ const ShopperLanding = () => {
 
   let itemData = [];
 
-  const [postcodeState, setPostcodeState] = useState("idle");
+  const [itemGrabState, setItemGrabState] = useState("idle");
   const [itemHolderState, setItemHolderState] = useState([]);
 
   // this is incredibly stupid. Is there a better way to do this?
@@ -30,18 +31,40 @@ const ShopperLanding = () => {
   // so we're using useEffect to force a re-render after validating
   // that we actually have data
 
+  const userData = useSelector((state) => state.user.userData);
+
+  const fetchData = async (postcode) => {
+    await fetch('/api/item/postcode/' + postcode)
+      .then(res => res.json())
+      .then(json => {
+        setItemHolderState(json.data);
+      })
+      .catch(err => {
+        console.log(err);
+        setItemGrabState("error");
+      });
+  };
+
+  useEffect(() => {
+    if (userData) {
+      setItemGrabState("loading");
+      let postcode = userData.addressPostcode.slice(0, 3);
+      fetchData(postcode);
+    }
+  }, [userData]);
+
   useEffect(() => {
     if (itemHolderState.length > 0) {
-      setPostcodeState("success");
+      setItemGrabState("success");
     };
-  }, [itemHolderState, setItemHolderState]);
+  }, [itemHolderState]);
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setPostcodeState("loading");
-
-    let targetPostcode;
+    setItemGrabState("loading");
 
     // this doesn't work right now
 
@@ -51,21 +74,21 @@ const ShopperLanding = () => {
 
     if (e.target.location.value.length === 3) {
       console.log("true", e.target.location.value);
-      targetPostcode = e.target.location.value;
+      fetchData(e.target.location.value);
     } else {
       console.log("false");
       navigator.geolocation.getCurrentPosition(setPostcode);
     }
 
-    itemData = await fetch('/api/item/postcode/' + targetPostcode)
-      .then(res => res.json())
-      .then(json => {
-        setItemHolderState(json.data);
-      })
-      .catch(err => {
-        console.log(err);
-        setPostcodeState("error");
-      });
+    // itemData = await fetch('/api/item/postcode/' + targetPostcode)
+    //   .then(res => res.json())
+    //   .then(json => {
+    //     setItemHolderState(json.data);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     setItemGrabState("error");
+    //   });
 
   }
 
@@ -78,10 +101,10 @@ const ShopperLanding = () => {
         <input type="text" maxLength="3" name="location" id="location" placeholder="A1B"></input>
         <button>Go!</button>
       </form>
-      {postcodeState === "loading" &&
+      {itemGrabState === "loading" &&
         <h2>Loading...</h2>
       }
-      {postcodeState === "success" &&
+      {itemGrabState === "success" &&
         <ItemGrid itemData={itemHolderState} />
       }
     </Wrapper>

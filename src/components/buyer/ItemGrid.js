@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 import Item from './Item';
 
@@ -25,6 +23,7 @@ const ItemGrid = (props) => {
 export default ItemGrid;
 
 const Wrapper = styled.div`
-  margin: 0 30px;
-  
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
 `;
