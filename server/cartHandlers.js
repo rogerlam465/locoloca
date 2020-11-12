@@ -1,6 +1,3 @@
-// all this mongo connection stuff is gonna be reptitive
-// should we abstract this out?
-
 const { MongoClient } = require('mongodb');
 
 require("dotenv").config();

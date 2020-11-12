@@ -21,6 +21,11 @@ import { userLogout } from '../actions';
 
 const Header = () => {
   const userData = useSelector((state) => state.user.userData);
+
+  // this will eventually be used to create a badge with the
+  // number of items in the cart
+  const cartData = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
   const history = useHistory();
 

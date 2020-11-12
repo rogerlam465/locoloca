@@ -5,16 +5,12 @@ import { useSelector } from 'react-redux';
 import ItemGrid from './buyer/ItemGrid';
 
 // done - add grid
-// todo - capture user location (search bar or by web api or by user profile)
+// done - capture user location (search bar)
+// todo - capture user location (web api)
+// done - capture user location (user profile)
 // done - customize grid according to location
+// todo - search bar
 // todo - build validator for postcode input (stretch)
-
-// should we... just try to grab location automatically?
-// then display the search bar if nothing shows?
-
-// for some reason, getCurrentPosition doesn't work well on
-// the tower. Let's leave it until after we deploy, I guess.
-// irksome, but whatcha gonna do.
 
 const ShopperLanding = () => {
 

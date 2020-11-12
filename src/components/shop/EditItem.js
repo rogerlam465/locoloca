@@ -3,6 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+// todo - preload if data exists
+// if this can't actually be done, then we'll just copy this doc
+// which wouldn't be very DRY, but whatever
+
 const EditItem = () => {
   const history = useHistory();
   const userShop = useSelector((state) => state.user.userData.shop);

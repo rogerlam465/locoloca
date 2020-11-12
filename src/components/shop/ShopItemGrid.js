@@ -65,6 +65,7 @@ const ShopItemGrid = () => {
               <th># in Stock</th>
               <th>Active Orders</th>
               <th>Sold</th>
+              <th>Edit Item</th>
             </tr>
 
             {itemState.map(item => {

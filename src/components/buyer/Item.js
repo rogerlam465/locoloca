@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { addItemToCart } from '../../actions';
 
 const Item = (props) => {
   const data = props.itemData;
+
+  // we need userData so that we can attach the cart to the appropriate user _id
+
+  // so the thing is that we have two choices to store cart data.
+  // we can store it in state, but then it's not persistent between reloads
+  // but if we store it in DB, that adds time per transaction, which adds lag to UI.
+  // so. How about we store it in state, but track state with useEffect and upload to DB?
+
+  const userData = useSelector((state) => state.user.userData);
+  const cartData = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
 
   let heading;
 
@@ -12,9 +26,31 @@ const Item = (props) => {
 
   let newPrice = parseFloat(data.price).toFixed(2);
 
+  // todo - if the user is logged in, just add it to the cart
+  // if they aren't logged in, force them to log in
+  // and then add the item to their cart
+
+  useEffect(() => {
+    // use fetch to dump this to the db
+    // since we're not waiting for a response, it doesn't
+    // even have to be async. viva la revolucion !!
+  }, [cartData])
+
   const handleClick = () => {
     // need a dispatch to add and remove items from the cart, I guess
 
+    dispatch(addItemToCart([data._id, 1]));
+  };
+
+  const PurchaseButton = () => {
+    if (cartData[data._id] > 0) {
+      console.log(cartData[data._id]);
+      return <SoldOut disabled>Added to cart</SoldOut>
+    } else if (data.numInStock === 0) {
+      return <SoldOut disabled>Add to cart</SoldOut>
+    } else if (data.numInStock > 0) {
+      return <AddToCart onClick={handleClick}>Add to cart</AddToCart>
+    }
   };
 
   return (
@@ -33,12 +69,7 @@ const Item = (props) => {
           <span>In stock: {data.numInStock}</span>
         </ItemPrice>
         <ButtonWrapper>
-          {data.numInStock > 0 &&
-            <AddToCart>Add to cart</AddToCart>
-          }
-          {data.numInStock === 0 &&
-            <SoldOut disabled>Add to cart</SoldOut>
-          }
+          <PurchaseButton />
         </ButtonWrapper>
       </ItemPriceWrapper>
 

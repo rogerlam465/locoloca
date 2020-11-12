@@ -10,16 +10,6 @@ import ShopItemGrid from './shop/ShopItemGrid';
 import EditItem from './shop/EditItem';
 import EditShop from './shop/EditShop';
 
-// main page should just have all the items for sale for the first 
-// shop plus, like, somewhere to add a new item
-
-// it would also be fun to have a secondary menu interface or something
-// something to show profits and such
-
-// need to show the number of outstanding orders, so we need an order center
-
-// gonna need a schema for orders, too, oh my aching head
-
 const ShopLanding = () => {
   const history = useHistory();
   const userData = useSelector((state) => state.user.userData);
@@ -30,11 +20,13 @@ const ShopLanding = () => {
   // if there is a shop, we need to fetch the shop data and go full into
   // shop management
 
-  if (typeof userData === undefined) {
+  if (!userData) {
     history.push("/");
-  }
-
-  if (!userData.shop) {
+    return (
+      <>
+      </>
+    )
+  } else if (userData.shop === null) {
     return (
       <ShopWrapper>
         <PitchWrapper>
