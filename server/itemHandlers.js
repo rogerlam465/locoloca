@@ -151,8 +151,6 @@ const createItem = async (req, res) => {
 
     const db = client.db("locoloca");
 
-    console.log(req.body);
-
     let r = await db.collection("items").insertOne(req.body)
 
     dbClose();

@@ -38,9 +38,17 @@ export const deleteItemInCart = (item) => ({
   item,
 });
 
-export const fetchCartData = () => ({
-  type: "FETCH_CART_DATA",
+export const requestCartData = () => ({
+  type: "REQUEST_CART_DATA",
 });
+
+export const receiveCartData = () => ({
+  type: "RECEIVE_CART_DATA",
+})
+
+export const receiveCartDataError = () => ({
+  type: "RECEIVE_CART_DATA_ERROR",
+})
 
 export const clearCart = () => ({
   type: "CLEAR_CART",

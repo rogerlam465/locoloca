@@ -12,7 +12,7 @@ let client;
 
 const dbConnect = async () => {
   try {
-    client = MongoClient(MONGO_URI, options0);
+    client = MongoClient(MONGO_URI, options);
     await client.connect();
 
     console.log("connected!");
@@ -26,4 +26,46 @@ const dbClose = () => {
   console.log("db disconnected, for the glory of Queen and country");
 }
 
-// getCart, addCart, modifyUser, deleteUser
+// todo - getCart
+// todo - replaceCart
+
+const getCart = async (req, res) => {
+  let user = req.params.id;
+
+  try {
+    await dbConnect();
+
+    const db = client.db("locoloca");
+
+    let r = await db.collection("cart").findOne({ "user": user });
+
+    res.status(200).json({ status: 200, message: "Data acquired", data: r.cart })
+
+    dbClose();
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: 500, message: "Server error. Evacuate." })
+  }
+}
+
+const replaceCart = async (req, res) => {
+  let cart = req.body.cart;
+  let user = req.body.user;
+
+  try {
+    await dbConnect();
+
+    const db = client.db("locoloca");
+
+    let r = await db.collection("cart").replaceOne({ "user": user }, { "user": user, cart }, { upsert: true });
+
+    res.status(201).json({ status: 201, message: "data upload complete" });
+
+    dbClose();
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: 500, message: "data upload failed." });
+  }
+}
+
+module.exports = { getCart, replaceCart };

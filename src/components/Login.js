@@ -7,6 +7,9 @@ import {
   requestUserData,
   receiveUserData,
   receiveUserDataError,
+  requestCartData,
+  receiveCartData,
+  receiveCartDataError
 } from '../actions';
 
 const Login = () => {
@@ -14,9 +17,6 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const userLoadState = useSelector((state) => state.user.status);
-
-  // this feels like it's going to cause a race condition
-  // with the fetch. sigh.
 
   useEffect(() => {
     if (userLoadState === 'complete') {
@@ -27,22 +27,33 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(requestUserData());
-    // setUserLoadState('pending');
+    dispatch(requestCartData());
 
     await fetch('/api/user/')
       .then(res => {
         return res.json();
       })
       .then(json => {
+        let id = json["data"][0]["_id"];
         dispatch(receiveUserData(json["data"][0]));
-        // setUserLoadState('loaded');
-        // return json["data"][0];
+        fetch('/api/cart/' + id)
+          .then(res => {
+            return res.json();
+          })
+          .then(json => {
+            dispatch(receiveCartData(json["data"]));
+          })
+          .catch(error => {
+            dispatch(receiveCartDataError());
+            console.log(error);
+          });
       })
       .catch(error => {
         dispatch(receiveUserDataError());
-        // setUserLoadState('error');
         console.log(error);
       });
+
+
   };
 
   return (

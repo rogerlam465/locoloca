@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 const { getUser, createUser, modifyUser, deleteUser } = require('./userHandlers');
-// const { getCart, modifyCart, clearCart } = require('./cartHandlers');
+const { getCart, replaceCart } = require('./cartHandlers');
 const { getShop, createShop, modifyShop, deleteShop } = require('./shopHandlers');
 const { getItem, getAllItems, createItem, modifyItem, deleteItem, getAllItemsByPostCode } = require('./itemHandlers');
 const { getOrder, createOrder, modifyOrder, deleteOrder } = require('./orderHandlers');
@@ -26,9 +26,14 @@ router.delete('/api/user', deleteUser);
 
 // cart management routes
 
-// router.get('/api/user/cart', getCart);
-// router.patch('/api/user/cart', modifyCart);
-// router.delete('/api/user/cart', clearCart);
+// Can we just brute force this? Like... I don't really have to
+// be granular, since we're storing the cart also in state in FE.
+// So can I just... replace the cart, every single time?
+
+// replaceOne with upsert flag?
+
+router.get('/api/cart/:id', getCart);
+router.post('/api/cart', replaceCart);
 
 // store management routes
 

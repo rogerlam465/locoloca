@@ -30,21 +30,30 @@ const Item = (props) => {
   // if they aren't logged in, force them to log in
   // and then add the item to their cart
 
-  useEffect(() => {
-    // use fetch to dump this to the db
-    // since we're not waiting for a response, it doesn't
-    // even have to be async. viva la revolucion !!
-  }, [cartData])
-
   const handleClick = () => {
-    // need a dispatch to add and remove items from the cart, I guess
+
+    // this doesn't quite work right
+    // for some reason, it's always one item 'behind'
+    // and that's weird. Why?
 
     dispatch(addItemToCart([data._id, 1]));
+
+    console.log(cartData);
+
+    fetch('/api/cart/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "user": userData._id,
+        "cart": cartData
+      })
+    });
   };
 
   const PurchaseButton = () => {
     if (cartData[data._id] > 0) {
-      console.log(cartData[data._id]);
       return <SoldOut disabled>Added to cart</SoldOut>
     } else if (data.numInStock === 0) {
       return <SoldOut disabled>Add to cart</SoldOut>
