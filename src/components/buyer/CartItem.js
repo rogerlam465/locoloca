@@ -6,7 +6,9 @@ import { useSelector } from 'react-redux';
 const CartItem = (props) => {
   let itemData = props.itemData;
 
-  const cartData = useSelector((state) => state.cart[itemData._id]);
+  const numOfItem = useSelector((state) => state.cart[itemData._id]);
+
+  let fixedPrice = parseFloat(itemData.price).toFixed(2);
 
   return (
     <Wrapper>
@@ -15,8 +17,9 @@ const CartItem = (props) => {
       </ImgWrapper>
       <ItemDetails>
         <h2>{itemData.itemName}</h2>
-        <p>total cost</p>
-        <p>number to purchase</p>
+        <p>Item Price: ${fixedPrice}</p>
+        <p>Number in Cart: {numOfItem}</p>
+        <p>Total Price: ${(fixedPrice * numOfItem).toFixed(2)}</p>
       </ItemDetails>
     </Wrapper>
   )
@@ -29,6 +32,7 @@ const Wrapper = styled.div`
   height: 200px;
   border-bottom: 1px grey solid;
   align-items: center;
+  width: 800px;
 `;
 
 const ProductImg = styled.img`
@@ -41,5 +45,5 @@ const ImgWrapper = styled.div`
 `;
 
 const ItemDetails = styled.div`
-
+  margin-left: 20px;
 `;

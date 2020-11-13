@@ -9,6 +9,13 @@ const CartGrid = () => {
   const [itemData, setItemData] = useState([]);
 
   const userData = useSelector((state) => state.user.userData._id);
+  const cartData = useSelector((state) => state.cart);
+
+  let totalPrice;
+
+  // we also need the total price. that shouldn't be too bad, because
+  // we have all the item data already in itemData.
+  // we just need the numbers from the cart.
 
   const fetchData = async (userId) => {
     fetch('/api/item/cart/' + userId)
@@ -26,12 +33,16 @@ const CartGrid = () => {
   useEffect(() => {
     setItemLoadState("loading");
     fetchData(userData);
-
   }, []);
 
   useEffect(() => {
     if (itemData.length > 0) {
+      totalPrice = 0;
       setItemLoadState("success");
+      itemData.map(item => {
+        totalPrice += item.price * cartData[item._id];
+      })
+      console.log(totalPrice);
     }
   }, [itemData]);
 
@@ -57,4 +68,6 @@ export default CartGrid;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  
 `;
