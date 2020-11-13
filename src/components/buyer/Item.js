@@ -38,8 +38,6 @@ const Item = (props) => {
 
     dispatch(addItemToCart([data._id, 1]));
 
-    console.log(cartData);
-
     fetch('/api/cart/', {
       method: 'POST',
       headers: {
@@ -64,7 +62,6 @@ const Item = (props) => {
 
   return (
     <Wrapper>
-
       <ItemData>
         <ProductHeading>{heading}</ProductHeading>
         <CenterImg>

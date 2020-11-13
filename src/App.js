@@ -11,6 +11,7 @@ import ShopCreate from './components/shop/ShopCreate';
 
 import CourierLanding from './components/CourierLanding';
 import ShopperLanding from './components/ShopperLanding';
+import Cart from './components/buyer/Cart';
 import Login from './components/Login';
 
 function App() {
@@ -38,6 +39,10 @@ function App() {
 
             <Route path="/shop/">
               <ShopLanding />
+            </Route>
+
+            <Route path="/cart/">
+              <Cart />
             </Route>
 
             {/* home route */}

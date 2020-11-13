@@ -38,12 +38,14 @@ export const deleteItemInCart = (item) => ({
   item,
 });
 
-export const requestCartData = () => ({
+export const requestCartData = (data) => ({
   type: "REQUEST_CART_DATA",
+  data,
 });
 
-export const receiveCartData = () => ({
+export const receiveCartData = (data) => ({
   type: "RECEIVE_CART_DATA",
+  data,
 })
 
 export const receiveCartDataError = () => ({

@@ -11,7 +11,7 @@ export default function cartReducer(state = initialState, action) {
     case 'RECEIVE_CART_DATA': {
       return {
         ...state,
-        userData: action.data,
+        cartData: action.data,
         status: 'complete',
       };
     }

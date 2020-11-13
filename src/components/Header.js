@@ -57,7 +57,9 @@ const Header = () => {
               </Link>
             </>
           }
-          <MenuItems><GrCart /></MenuItems>
+          <Link to="/cart">
+            <MenuItems><GrCart /></MenuItems>
+          </Link>
           {userData &&
             <MenuItems onClick={handleSubmit}><GrLogout /></MenuItems>
           }
