@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import CartItem from './CartItem';
+import CartCheckout from './CartCheckout';
 
 const CartGrid = () => {
   const [itemLoadState, setItemLoadState] = useState("idle");
@@ -11,14 +12,14 @@ const CartGrid = () => {
   const userData = useSelector((state) => state.user.userData._id);
   const cartData = useSelector((state) => state.cart);
 
-  let totalPrice;
+  let totalPrice = 0;
 
   // we also need the total price. that shouldn't be too bad, because
   // we have all the item data already in itemData.
   // we just need the numbers from the cart.
 
   const fetchData = async (userId) => {
-    fetch('/api/item/cart/' + userId)
+    await fetch('/api/item/cart/' + userId)
       .then(res => res.json())
       .then(json => {
         setItemLoadState("complete");
@@ -37,12 +38,7 @@ const CartGrid = () => {
 
   useEffect(() => {
     if (itemData.length > 0) {
-      totalPrice = 0;
       setItemLoadState("success");
-      itemData.map(item => {
-        totalPrice += item.price * cartData[item._id];
-      })
-      console.log(totalPrice);
     }
   }, [itemData]);
 
@@ -57,8 +53,10 @@ const CartGrid = () => {
             return <CartItem itemData={item} />
           })
           }
+          <CartCheckout price={totalPrice} />
         </>
       }
+
     </Wrapper>
   )
 };
