@@ -24,7 +24,7 @@ const Header = () => {
 
   // this will eventually be used to create a badge with the
   // number of items in the cart
-  const cartData = useSelector((state) => state.cart);
+  // const cartData = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
   const history = useHistory();
