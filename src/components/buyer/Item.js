@@ -36,7 +36,10 @@ const Item = (props) => {
     // for some reason, it's always one item 'behind'
     // and that's weird. Why?
 
-    dispatch(addItemToCart([data._id, 1]));
+    // this is actually expected behaviour, but I don't know
+    // how to fix it.
+
+    dispatch(addItemToCart(data._id));
 
     fetch('/api/cart/', {
       method: 'POST',

@@ -26,8 +26,8 @@ const dbClose = () => {
   console.log("db disconnected, for the glory of Queen and country");
 }
 
-// todo - getCart
-// todo - replaceCart
+// done - getCart
+// done - replaceCart
 
 const getCart = async (req, res) => {
   let user = req.params.id;

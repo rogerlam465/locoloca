@@ -11,7 +11,7 @@ export default function cartReducer(state = initialState, action) {
     case 'RECEIVE_CART_DATA': {
       return {
         ...state,
-        cartData: action.data,
+        ...action.data,
         status: 'complete',
       };
     }
@@ -24,7 +24,7 @@ export default function cartReducer(state = initialState, action) {
     case 'ADD_ITEM_TO_CART': {
       return {
         ...state,
-        [action.item[0]]: [action.item[1]]
+        [action.item]: 1
       };
     }
     case 'MODIFY_ITEM_IN_CART': {

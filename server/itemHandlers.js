@@ -143,6 +143,43 @@ const getAllItemsByPostCode = async (req, res) => {
   }
 };
 
+const getAllItemsInCart = async (req, res) => {
+
+  // the goal here is to grab all the items based on what's in the cart
+
+  const targetCart = req.params.cart;
+
+  try {
+
+    await dbConnect();
+
+    const db = client.db("locoloca");
+
+    let cartData = await db.collection("cart").findOne({ "user": targetCart });
+
+    let dataHolder = [];
+
+    for (const property in cartData.cart) {
+      // 24 because Mongo IDs are 24 chars long
+      if (property.length === 24) {
+        dataHolder.push(ObjectID(property));
+      }
+    };
+
+    let allItems = await db.collection("items").find({ _id: { $in: dataHolder } }).toArray();
+
+    dbClose();
+
+    // return everything. good god.
+
+    res.status(200).json({ status: 200, message: "Care package acquired.", data: allItems });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: 500, message: "Sorry, chief, ain't gonna happen: server error 500." });
+  }
+};
+
 // item management routes
 
 const createItem = async (req, res) => {
@@ -199,4 +236,4 @@ const deleteItem = async () => {
   }
 };
 
-module.exports = { getItem, getAllItems, createItem, modifyItem, deleteItem, getAllItemsByPostCode };
+module.exports = { getItem, getAllItems, createItem, modifyItem, deleteItem, getAllItemsByPostCode, getAllItemsInCart };

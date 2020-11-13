@@ -3,7 +3,7 @@ const router = require("express").Router();
 const { getUser, createUser, modifyUser, deleteUser } = require('./userHandlers');
 const { getCart, replaceCart } = require('./cartHandlers');
 const { getShop, createShop, modifyShop, deleteShop } = require('./shopHandlers');
-const { getItem, getAllItems, createItem, modifyItem, deleteItem, getAllItemsByPostCode } = require('./itemHandlers');
+const { getItem, getAllItems, createItem, modifyItem, deleteItem, getAllItemsByPostCode, getAllItemsInCart } = require('./itemHandlers');
 const { getOrder, createOrder, modifyOrder, deleteOrder } = require('./orderHandlers');
 const { getPostcodes } = require('./postcodeHandlers');
 
@@ -45,7 +45,8 @@ router.delete('/api/shop', deleteShop);
 // item management routes
 
 router.get('/api/item/all/:id?', getAllItems);
-router.get('/api/item/postcode/:postcode', getAllItemsByPostCode)
+router.get('/api/item/postcode/:postcode', getAllItemsByPostCode);
+router.get('/api/item/cart/:cart', getAllItemsInCart);
 router.get('/api/item', getItem);
 router.post('/api/item', createItem);
 router.patch('/api/item', modifyItem);
