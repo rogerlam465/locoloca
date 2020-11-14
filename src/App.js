@@ -12,6 +12,7 @@ import ShopCreate from './components/shop/ShopCreate';
 import CourierLanding from './components/CourierLanding';
 import ShopperLanding from './components/ShopperLanding';
 import Cart from './components/buyer/Cart';
+import Checkout from './components/buyer/Checkout';
 import Login from './components/Login';
 
 function App() {
@@ -43,6 +44,10 @@ function App() {
 
             <Route path="/cart/">
               <Cart />
+            </Route>
+
+            <Route path="/checkout">
+
             </Route>
 
             {/* home route */}

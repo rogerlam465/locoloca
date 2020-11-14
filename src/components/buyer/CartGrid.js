@@ -3,14 +3,25 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import CartItem from './CartItem';
-import CartCheckout from './CartCheckout';
+import CartCheckoutFooter from './CartCheckoutFooter';
 
 const CartGrid = () => {
   const [itemLoadState, setItemLoadState] = useState("idle");
   const [itemData, setItemData] = useState([]);
+  const [price, setPrice] = useState(0);
 
   const userData = useSelector((state) => state.user.userData._id);
-  const cartData = useSelector((state) => state.cart);
+  const cartDataRaw = useSelector((state) => state.cart);
+
+  let cartData = [];
+
+  Object.keys(cartDataRaw).map(key => {
+    let holder = {};
+    if (key != "status") {
+      holder[key] = cartDataRaw[key];
+      cartData.push(holder);
+    }
+  });
 
   let totalPrice = 0;
 
@@ -22,8 +33,13 @@ const CartGrid = () => {
     await fetch('/api/item/cart/' + userId)
       .then(res => res.json())
       .then(json => {
-        setItemLoadState("complete");
+        totalPrice = 0;
         setItemData(json.data);
+        let itemDataHolder = json.data;
+        itemDataHolder.map(item => {
+          let targetId = item["_id"];
+          totalPrice += item["price"] * cartDataRaw[targetId];
+        })
       })
       .catch(err => {
         console.log(err)
@@ -33,14 +49,12 @@ const CartGrid = () => {
 
   useEffect(() => {
     setItemLoadState("loading");
-    fetchData(userData);
+    fetchData(userData)
+      .then(() => {
+        setPrice(totalPrice);
+        setItemLoadState("success");
+      })
   }, []);
-
-  useEffect(() => {
-    if (itemData.length > 0) {
-      setItemLoadState("success");
-    }
-  }, [itemData]);
 
   return (
     <Wrapper>
@@ -53,7 +67,7 @@ const CartGrid = () => {
             return <CartItem itemData={item} />
           })
           }
-          <CartCheckout price={totalPrice} />
+          <CartCheckoutFooter price={price} />
         </>
       }
 
@@ -67,5 +81,4 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 `;
