@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import CartItem from './CartItem';
-import CartCheckoutFooter from './CartCheckoutFooter';
+
+const CartCheckoutFooter = (props) => {
+  let total = props.price;
+  return (
+    <CheckoutWrapper>
+      <h2>Your total is: ${total}!</h2>
+      <Link to="/checkout">
+        <CheckoutButton>Checkout!</CheckoutButton>
+      </Link>
+    </CheckoutWrapper>
+  )
+};
 
 const CartGrid = () => {
   const [itemLoadState, setItemLoadState] = useState("idle");
@@ -81,4 +93,16 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const CheckoutButton = styled.button`
+  width: 200px;
+  height: 170px;
+  border-radius: 3px;
+  font-size: 30px;
+`;
+
+const CheckoutWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;

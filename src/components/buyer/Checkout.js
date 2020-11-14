@@ -1,15 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 const Checkout = () => {
+  const userData = useSelector((state) => state.user.userData);
+
+  // this needs to trigger a clearing of the cart
+  // and the creation of an order. shit.
+
   return (
     <Wrapper>
       <ContentWrapper>
         <h1>Thank you for your purchase!</h1>
         <p>Your order will be delivered to the following address:</p>
-        <p>civicNum streetName, optional apartment number</p>
-        <p>city, province</p>
-        <p>postal code</p>
+        <p>{userData.firstName} {userData.lastName}</p>
+        <p>{userData.addressCivicNum} {userData.addressStreet}
+          {userData.addressAptNum &&
+            <span>, Unit {userData.addressAptNum}</span>
+          }
+        </p>
+        <p>{userData.addressCity}, {userData.addressProvince}</p>
+        <p>{userData.addressCountry}</p>
+        <p>{userData.addressPostcode}</p>
       </ContentWrapper>
     </Wrapper>
   )
