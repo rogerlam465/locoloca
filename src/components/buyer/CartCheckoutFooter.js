@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 
 const CartCheckoutFooter = (props) => {
   let total = props.price;
-  console.log(props);
-  console.log(total);
   return (
     <Wrapper>
       <h2>Your total is: ${total}!</h2>

@@ -47,7 +47,7 @@ function App() {
             </Route>
 
             <Route path="/checkout">
-
+              <Checkout />
             </Route>
 
             {/* home route */}
