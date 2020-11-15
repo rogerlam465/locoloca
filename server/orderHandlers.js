@@ -23,13 +23,14 @@ const dbConnect = async () => {
 
 const dbClose = () => {
   client.close();
-  console.log("db disconnected, for the glory of Queen and country");
+  console.log("db disconnected");
 }
 
-// router.get('/api/order', getorder);
-// router.post('/api/order', createorder);
-// router.patch('/api/order', modifyorder);
-// router.delete('/api/order', deleteorder);
+// done - router.get('/api/order', getOrder);
+// todo - router.post('/api/order/', createOrder);
+// todo - router.patch('/api/order/Order', modifyOrderStatus);
+// todo - router.patch('/api/order/:order/courier/:courier', assignCourier);
+// todo - router.delete('/api/order/:order', deleteOrder);
 
 const getOrder = async (req, res) => {
   try {
@@ -37,11 +38,11 @@ const getOrder = async (req, res) => {
 
     const db = client.db("locoloca");
 
-    // should pull all orders related to one seller
+    // should pull all orders
+    // for the purposes of shop-related orders, we'll filter in FE
+    // I don't even know how we're going to do that, but we'll figure it out
 
     let r = await db.collection("orders").find().toArray();
-
-    console.log(r);
 
     res.status(200).json({ status: 200, data: r, message: "TARGET LOCATED." });
 
@@ -49,11 +50,20 @@ const getOrder = async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    res.status(500).json({ status: 500, message: "Sorry, chief, ain't gonna happen: server error 500." });
+    res.status(500).json({ status: 500, message: "Sorry, server error 500." });
   }
 };
 
 const createOrder = async (req, res) => {
+
+  // seller id
+  // seller location
+  // buyer id
+  // buyer location
+  // courier id
+  // status
+  // delivery deadline
+
   try {
     await dbConnect();
 
@@ -69,11 +79,11 @@ const createOrder = async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    res.status(500).json({ status: 500, message: "Sorry, chief, ain't gonna happen: server error 500." });
+    res.status(500).json({ status: 500, message: "Sorry, server error 500." });
   }
 };
 
-const modifyOrder = async () => {
+const modifyOrderStatus = async (req, res) => {
   try {
     await dbConnect();
 
@@ -87,11 +97,11 @@ const modifyOrder = async () => {
 
   } catch (err) {
     console.log(err);
-    res.status(500).json({ status: 500, message: "Sorry, chief, ain't gonna happen: server error 500." });
+    res.status(500).json({ status: 500, message: "Sorry, server error 500." });
   }
 };
 
-const deleteOrder = async () => {
+const assignCourier = async (req, res) => {
   try {
     await dbConnect();
 
@@ -105,8 +115,9 @@ const deleteOrder = async () => {
 
   } catch (err) {
     console.log(err);
-    res.status(500).json({ status: 500, message: "Sorry, chief, ain't gonna happen: server error 500." });
+    res.status(500).json({ status: 500, message: "Sorry, server error 500." });
   }
 };
 
-module.exports = { getOrder, createOrder, modifyOrder, deleteOrder };
+
+module.exports = { getOrder, createOrder, modifyOrderStatus, assignCourier };
