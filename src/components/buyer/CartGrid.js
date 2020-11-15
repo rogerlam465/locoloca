@@ -1,18 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 import CartItem from './CartItem';
+
+const handleClick = () => {
+  // this function is intended to send the data to BE.
+
+  // data required:
+  // seller id - don't have this yet
+  // seller location - don't have this yet
+  // buyer id - we have this
+  // buyer location - we have this
+  // courier id - TBD, we can leave it blank for now
+  // status - set default to active
+  // delivery deadline - two days from today
+
+  // we're gonna use a state for this to make sure that the data
+  // is correctly pushed to DB before we use history.push to
+  // send the client to the checkout page.
+
+  // if I declare the state inside the main component, it's
+  // not visible in here. that's irksome.
+
+};
 
 const CartCheckoutFooter = (props) => {
   let total = props.price;
   return (
     <CheckoutWrapper>
       <h2>Your total is: ${total}!</h2>
-      <Link to="/checkout">
-        <CheckoutButton>Checkout!</CheckoutButton>
-      </Link>
+      {/* <Link to="/checkout"> */}
+      <CheckoutButton onClick={handleClick}>Checkout!</CheckoutButton>
+      {/* </Link> */}
     </CheckoutWrapper>
   )
 };
@@ -57,6 +78,8 @@ const CartGrid = () => {
         console.log(err)
         setItemLoadState("error");
       });
+
+    await fetch('/api/item');
   }
 
   useEffect(() => {
