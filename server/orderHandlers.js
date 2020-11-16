@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectID, ObjectId } = require('mongodb');
 
 require("dotenv").config();
 const { MONGO_URI } = process.env;
@@ -27,8 +27,8 @@ const dbClose = () => {
 }
 
 // done - router.get('/api/order', getOrder);
-// todo - router.post('/api/order/', createOrder);
-// todo - router.patch('/api/order/Order', modifyOrderStatus);
+// done - router.post('/api/order/', createOrder);
+// todo - router.patch('/api/order/:order', modifyOrderStatus);
 // todo - router.patch('/api/order/:order/courier/:courier', assignCourier);
 // todo - router.delete('/api/order/:order', deleteOrder);
 
@@ -56,30 +56,67 @@ const getOrder = async (req, res) => {
 
 const createOrder = async (req, res) => {
 
-  // seller id
-  // seller location
-  // buyer id
-  // buyer location
-  // courier id
-  // status
-  // delivery deadline
+  console.log("create order");
+
+  let cart = req.body.cart;
+  let orders = [];
+
+  let buyerId = req.body.user._id;
+  let buyerPostcode = req.body.user.addressPostcode;
+  let status = "active";
+  let targetDeliveryDate = new Date();
+  targetDeliveryDate.setDate(targetDeliveryDate.getDate() + 2);
+
+  let cartTargetSellers = [];
+
+  cart.forEach(item => {
+    cartTargetSellers.push(ObjectID(Object.keys(item)[0]));
+  })
 
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    console.log(req.body);
+    // theoretically, the projection field should filter the fields I get back.
+    // this absolutely is not happening. I don't know why.
 
-    let r = await db.collection("orders").insertOne(req.body)
+    let fullItemData = await db.collection("items").find({ "_id": { $in: cartTargetSellers } }, { "shop": 1 }).toArray();
+
+    let targetPostcodes = [];
+
+    fullItemData.forEach(item => {
+      targetPostcodes.push(ObjectID(item.shop));
+    })
+
+    let shopData = await db.collection("shops").find({ "_id": { $in: targetPostcodes } }).toArray();
+
+    for (let i = 0; i < cartTargetSellers.length; i++) {
+      let newObj = {
+        "itemId": cartTargetSellers[i],
+        "itemToBuy": cart[i][cartTargetSellers[i]],
+        "sellerPostcode": shopData[i].postcode,
+        "sellerId": shopData[i]._id,
+        "buyerId": buyerId,
+        "buyerPostcode": buyerPostcode,
+        "courierId": "N/A",
+        "status": status,
+        "targetDeliveryDate": targetDeliveryDate,
+        "courierId": "N/A"
+      }
+      orders.push(newObj);
+    }
+
+    let r = await db.collection("orders").insertMany(orders);
+
+    // let r = await db.collection("orders").insertMany({ testObj });
 
     dbClose();
 
-    res.status(201).json({ status: 201, message: "Care package delivered." })
+    res.status(201).json({ status: 201, message: "oh god it worked" });
 
   } catch (err) {
     console.log(err);
-    res.status(500).json({ status: 500, message: "Sorry, server error 500." });
   }
 };
 

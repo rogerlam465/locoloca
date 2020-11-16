@@ -1,19 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-
-// this interface should be relatively simpler.
-// mobile first
-// pull current location
-// https://www.pluralsight.com/guides/how-to-use-geolocation-call-in-reactjs
 
 // show all pending deliveries nearby
 // map and list view? - should remember preference
 // search by destination
 
 const CourierLanding = () => {
+
+  let [deliveryDataStatus, setDeliveryDataStatus] = useState("idle");
+  let [deliveryData, setDeliveryData] = useState([]);
+
+  useEffect(() => {
+
+    setDeliveryDataStatus("loading");
+
+    try {
+      fetch('/api/order')
+        .then(res => res.json())
+        .then(json => {
+          setDeliveryData(json);
+          setDeliveryDataStatus("complete");
+        })
+        .catch(err => console.log(err);
+
+    } catch (err) {
+      console.log(err);
+    }
+
+    console.log(deliveryData);
+
+  }, []);
+
   return (
-    <h1>what</h1>
+    <Wrapper>
+      <h1>Available Deliveries</h1>
+
+    </Wrapper>
   );
 };
 
 export default CourierLanding;
+
+const Wrapper = styled.div`
+  margin: 30px;
+`;

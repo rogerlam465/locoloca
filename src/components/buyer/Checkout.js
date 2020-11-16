@@ -5,9 +5,6 @@ import { useSelector } from 'react-redux';
 const Checkout = () => {
   const userData = useSelector((state) => state.user.userData);
 
-  // this needs to trigger a clearing of the cart
-  // and the creation of an order. shit.
-
   return (
     <Wrapper>
       <ContentWrapper>

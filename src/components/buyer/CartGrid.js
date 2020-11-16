@@ -5,45 +5,14 @@ import { useSelector } from 'react-redux';
 
 import CartItem from './CartItem';
 
-const handleClick = () => {
-  // this function is intended to send the data to BE.
-
-  // data required:
-  // seller id - don't have this yet
-  // seller location - don't have this yet
-  // buyer id - we have this
-  // buyer location - we have this
-  // courier id - TBD, we can leave it blank for now
-  // status - set default to active
-  // delivery deadline - two days from today
-
-  // we're gonna use a state for this to make sure that the data
-  // is correctly pushed to DB before we use history.push to
-  // send the client to the checkout page.
-
-  // if I declare the state inside the main component, it's
-  // not visible in here. that's irksome.
-
-};
-
-const CartCheckoutFooter = (props) => {
-  let total = props.price;
-  return (
-    <CheckoutWrapper>
-      <h2>Your total is: ${total}!</h2>
-      {/* <Link to="/checkout"> */}
-      <CheckoutButton onClick={handleClick}>Checkout!</CheckoutButton>
-      {/* </Link> */}
-    </CheckoutWrapper>
-  )
-};
-
 const CartGrid = () => {
   const [itemLoadState, setItemLoadState] = useState("idle");
   const [itemData, setItemData] = useState([]);
   const [price, setPrice] = useState(0);
 
-  const userData = useSelector((state) => state.user.userData._id);
+
+  const fullUserData = useSelector((state) => state.user.userData);
+  const userData = fullUserData._id;
   const cartDataRaw = useSelector((state) => state.cart);
 
   let cartData = [];
@@ -78,9 +47,32 @@ const CartGrid = () => {
         console.log(err)
         setItemLoadState("error");
       });
-
-    await fetch('/api/item');
   }
+
+
+  const handleClick = () => {
+
+    // theoretically, I could grab the following
+    // data based on cartData, but since we already
+    // have it...
+
+    let data = {
+      "user": fullUserData,
+      "cart": cartData
+    };
+
+    console.log(data);
+
+    // fetch('/api/order', {
+    //   method: 'POST',
+    //   body: JSON.stringify(data),
+    //   headers: { 'Content-Type': 'application/json' }
+    // })
+    //   .catch(error => {
+    //     console.log(error);
+    //   })
+
+  };
 
   useEffect(() => {
     setItemLoadState("loading");
@@ -102,7 +94,14 @@ const CartGrid = () => {
             return <CartItem itemData={item} />
           })
           }
-          <CartCheckoutFooter price={price} />
+          {price &&
+            <CheckoutWrapper>
+              <h2>Your total is: ${price}!</h2>
+
+              <CheckoutButton onClick={handleClick}>Checkout!</CheckoutButton>
+
+            </CheckoutWrapper>
+          }
         </>
       }
 

@@ -31,6 +31,7 @@ const dbClose = () => {
 // item fetch routes
 
 const getItem = async (req, res) => {
+
   try {
     await dbConnect();
 
