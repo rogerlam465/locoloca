@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 // show all pending deliveries nearby
@@ -18,16 +18,16 @@ const CourierLanding = () => {
       fetch('/api/order')
         .then(res => res.json())
         .then(json => {
-          setDeliveryData(json);
+          setDeliveryData(json.data);
           setDeliveryDataStatus("complete");
         })
-        .catch(err => console.log(err);
+        .catch(err => console.log(err));
 
     } catch (err) {
       console.log(err);
     }
 
-    console.log(deliveryData);
+
 
   }, []);
 
@@ -35,6 +35,20 @@ const CourierLanding = () => {
     <Wrapper>
       <h1>Available Deliveries</h1>
 
+      {deliveryDataStatus === "idle" &&
+        <h2>Loading...</h2>
+      }
+      {deliveryDataStatus === "complete" &&
+        <table>
+          <tr>
+            <th>Departure Postcode</th>
+            <th>Destination Postcode</th>
+            <th>Delivery Date</th>
+            <th>Bounty</th>
+            <th>Availability</th>
+          </tr>
+        </table>
+      }
     </Wrapper>
   );
 };

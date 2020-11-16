@@ -50,6 +50,10 @@ function App() {
               <Checkout />
             </Route>
 
+            <Route path="/courier">
+              <CourierLanding />
+            </Route>
+
             {/* home route */}
             <Route exact path="/">
               <ShopperLanding />

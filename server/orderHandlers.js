@@ -73,6 +73,9 @@ const createOrder = async (req, res) => {
     cartTargetSellers.push(ObjectID(Object.keys(item)[0]));
   })
 
+  console.log(cart);
+  console.log(cartTargetSellers);
+
   try {
     await dbConnect();
 
@@ -89,14 +92,18 @@ const createOrder = async (req, res) => {
       targetPostcodes.push(ObjectID(item.shop));
     })
 
-    let shopData = await db.collection("shops").find({ "_id": { $in: targetPostcodes } }).toArray();
-
     for (let i = 0; i < cartTargetSellers.length; i++) {
+
+      let shopData = await db.collection("shops").findOne({ "_id": targetPostcodes[i] });
+
+      let itemId = cartTargetSellers[i];
+      let numToBuy = Number(Object.values(cart[i]));
+
       let newObj = {
-        "itemId": cartTargetSellers[i],
-        "itemToBuy": cart[i][cartTargetSellers[i]],
-        "sellerPostcode": shopData[i].postcode,
-        "sellerId": shopData[i]._id,
+        "itemId": itemId,
+        "numToBuy": numToBuy,
+        "sellerPostcode": shopData["postcode"],
+        "sellerId": shopData["_id"],
         "buyerId": buyerId,
         "buyerPostcode": buyerPostcode,
         "courierId": "N/A",

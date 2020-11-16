@@ -53,7 +53,6 @@ const EditItem = () => {
         setItemLoad("error");
       });
 
-    console.log(itemLoad);
   }
 
   return (

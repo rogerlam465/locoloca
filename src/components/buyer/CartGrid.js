@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-// import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
+import { clearCart } from '../../actions';
 import CartItem from './CartItem';
 
 const CartGrid = () => {
@@ -10,6 +11,8 @@ const CartGrid = () => {
   const [itemData, setItemData] = useState([]);
   const [price, setPrice] = useState(0);
 
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const fullUserData = useSelector((state) => state.user.userData);
   const userData = fullUserData._id;
@@ -52,25 +55,34 @@ const CartGrid = () => {
 
   const handleClick = () => {
 
-    // theoretically, I could grab the following
-    // data based on cartData, but since we already
-    // have it...
-
     let data = {
       "user": fullUserData,
       "cart": cartData
     };
 
-    console.log(data);
+    fetch('/api/order', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(() => {
+        dispatch(clearCart());
+        fetch('/api/cart/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "user": userData._id,
+            "cart": {}
+          })
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      })
 
-    // fetch('/api/order', {
-    //   method: 'POST',
-    //   body: JSON.stringify(data),
-    //   headers: { 'Content-Type': 'application/json' }
-    // })
-    //   .catch(error => {
-    //     console.log(error);
-    //   })
+    history.push("/checkout");
 
   };
 
