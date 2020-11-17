@@ -154,14 +154,17 @@ const getCourierOrders = async (req, res) => {
 };
 
 const getShopOrders = async (req, res) => {
+
+  let shopId = req.params.shop;
+
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    let r = await db.collection("orders").find().toArray();
+    let r = await db.collection("orders").find({ "sellerId": ObjectID(shopId) }).toArray();
 
-    console.log(r);
+    res.status(201).json({ status: 201, message: "Data recovered.", data: r });
 
     dbClose();
 
