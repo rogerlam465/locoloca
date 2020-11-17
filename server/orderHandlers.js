@@ -1,4 +1,4 @@
-const { MongoClient, ObjectID, ObjectId } = require('mongodb');
+const { MongoClient, ObjectID } = require('mongodb');
 
 require("dotenv").config();
 const { MONGO_URI } = process.env;
@@ -146,19 +146,21 @@ const modifyOrderStatus = async (req, res) => {
 };
 
 const assignCourier = async (req, res) => {
-  let user = req.body.userId;
-  let order = req.body.orderId;
-  
+  let courier = req.body.courierId;
+  let orderId = ObjectID(req.body.orderId);
+
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    let r = await db.collection("orders").find().toArray();
+    let r = await db.collection("orders").findOneAndUpdate({ "_id": orderId }, { $set: { "courierId": courier } });
 
     console.log(r);
 
     dbClose();
+
+    res.status(201).json({ status: 201, message: "courier assigned." });
 
   } catch (err) {
     console.log(err);

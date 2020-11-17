@@ -1,16 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 const DeliveryItem = (props) => {
-
-  const onAssign = (e) => {
-
-
-
-  };
-
-
   const data = props.data;
+
+  const courierId = useSelector((state) => state.user.userData._id);
+  const orderId = data._id;
+
+  const onAssign = () => {
+    console.log(orderId);
+    fetch('/api/order/courier', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "courierId": courierId,
+        "orderId": orderId
+      })
+    });
+  };
 
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -39,7 +49,7 @@ const DeliveryItem = (props) => {
         <span>$3</span>
       </td>
       <td>
-        <button>Claim Delivery</button>
+        <button onClick={onAssign}>Claim Delivery</button>
       </td>
 
     </Wrapper>

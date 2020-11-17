@@ -59,8 +59,9 @@ router.delete('/api/item', deleteItem);
 
 router.get('/api/order/', getOrder);
 router.post('/api/order/', createOrder);
-router.patch('/api/order/Order', modifyOrderStatus);
-router.patch('/api/order/:order/courier/:courier', assignCourier);
+router.patch('/api/order/courier', assignCourier);
+router.patch('/api/order/:order', modifyOrderStatus);
+
 
 // postcode routes
 
