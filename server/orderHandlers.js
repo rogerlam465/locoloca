@@ -29,8 +29,14 @@ const dbClose = () => {
 // done - router.get('/api/order', getOrder);
 // done - router.post('/api/order/', createOrder);
 // todo - router.patch('/api/order/:order', modifyOrderStatus);
-// todo - router.patch('/api/order/:order/courier/:courier', assignCourier);
+// done - router.patch('/api/order/:order/courier/:courier', assignCourier);
 // todo - router.delete('/api/order/:order', deleteOrder);
+
+// ideally it would be more fine-grained than this.
+// todo - get orders related to a shop
+// 
+// todo - get all orders for courier page
+//    router.get('/api/order/courier/:courierId', getCourierOrders);
 
 const getOrder = async (req, res) => {
   try {
@@ -73,9 +79,6 @@ const createOrder = async (req, res) => {
     cartTargetSellers.push(ObjectID(Object.keys(item)[0]));
   })
 
-  console.log(cart);
-  console.log(cartTargetSellers);
-
   try {
     await dbConnect();
 
@@ -116,8 +119,6 @@ const createOrder = async (req, res) => {
 
     let r = await db.collection("orders").insertMany(orders);
 
-    // let r = await db.collection("orders").insertMany({ testObj });
-
     dbClose();
 
     res.status(201).json({ status: 201, message: "oh god it worked" });
@@ -127,7 +128,32 @@ const createOrder = async (req, res) => {
   }
 };
 
-const modifyOrderStatus = async (req, res) => {
+// despite the name of the method, this should actually do two things
+// first, it should pull all the orders assigned to the current courier
+// second, it should pull all available orders and return the two things
+
+const getCourierOrders = async (req, res) => {
+
+  let courierId = req.params.courierId;
+
+  try {
+    await dbConnect();
+
+    const db = client.db("locoloca");
+
+    let data = await db.collection("orders").find({ $or: [{ "courierId": courierId }, { "courierId": "N/A" }] }).toArray();
+
+    res.status(201).json({ status: 201, message: "Data located.", assigned: data })
+
+    dbClose();
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: 500, message: "Sorry, server error 500." });
+  }
+};
+
+const getShopOrders = async (req, res) => {
   try {
     await dbConnect();
 
@@ -145,6 +171,28 @@ const modifyOrderStatus = async (req, res) => {
   }
 };
 
+const modifyOrderStatus = async (req, res) => {
+  let courier = req.body.courierId;
+  let orderId = ObjectID(req.body.orderId);
+  let status = req.body.status;
+
+  try {
+    await dbConnect();
+
+    const db = client.db("locoloca");
+
+    let r = await db.collection("orders").findOneAndUpdate({ "_id": orderId }, { $set: { "courierId": courier, "status": status } });
+
+    dbClose();
+
+    res.status(201).json({ status: 201, message: "courier assigned." });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: 500, message: "Sorry, server error 500." });
+  }
+};
+
 const assignCourier = async (req, res) => {
   let courier = req.body.courierId;
   let orderId = ObjectID(req.body.orderId);
@@ -154,9 +202,7 @@ const assignCourier = async (req, res) => {
 
     const db = client.db("locoloca");
 
-    let r = await db.collection("orders").findOneAndUpdate({ "_id": orderId }, { $set: { "courierId": courier } });
-
-    console.log(r);
+    let r = await db.collection("orders").findOneAndUpdate({ "_id": orderId }, { $set: { "courierId": courier, "status": "assigned" } });
 
     dbClose();
 
@@ -169,4 +215,4 @@ const assignCourier = async (req, res) => {
 };
 
 
-module.exports = { getOrder, createOrder, modifyOrderStatus, assignCourier };
+module.exports = { getOrder, createOrder, modifyOrderStatus, assignCourier, getCourierOrders, getShopOrders };

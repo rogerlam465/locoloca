@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -7,9 +7,13 @@ const DeliveryItem = (props) => {
 
   const courierId = useSelector((state) => state.user.userData._id);
   const orderId = data._id;
-  let [currentStatus, setCurrentStatus] = useState("active");
+  let [currentStatus, setCurrentStatus] = useState();
 
-  const onAssign = () => {
+  useEffect(() => {
+    setCurrentStatus(data.status);
+  }, [])
+
+  const delivered = () => {
     fetch('/api/order/courier', {
       method: 'PATCH',
       headers: {
@@ -17,10 +21,11 @@ const DeliveryItem = (props) => {
       },
       body: JSON.stringify({
         "courierId": courierId,
-        "orderId": orderId
+        "orderId": orderId,
+        "status": "delivered"
       })
     });
-    setCurrentStatus("assigned");
+    setCurrentStatus("delivered");
   };
 
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -50,11 +55,12 @@ const DeliveryItem = (props) => {
         <span>$3</span>
       </td>
       <td>
-        {currentStatus === "active" &&
-          <button onClick={onAssign}>Claim Delivery</button>
-        }
         {currentStatus === "assigned" &&
-          <button disabled>Assigned</button>}
+          <button onClick={delivered}>I delivered it!</button>
+        }
+        {currentStatus === "delivered" &&
+          <button disabled>Archived</button>
+        }
       </td>
 
     </Wrapper>

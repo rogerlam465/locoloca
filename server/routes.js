@@ -6,7 +6,7 @@ const { getUser, createUser, modifyUser, deleteUser } = require('./userHandlers'
 const { getCart, replaceCart, clearCart } = require('./cartHandlers');
 const { getShop, createShop, modifyShop, deleteShop } = require('./shopHandlers');
 const { getItem, getAllItems, createItem, modifyItem, deleteItem, getAllItemsByPostCode, getAllItemsInCart } = require('./itemHandlers');
-const { getOrder, createOrder, modifyOrderStatus, assignCourier } = require('./orderHandlers');
+const { getOrder, createOrder, modifyOrderStatus, assignCourier, getCourierOrders, getShopOrders } = require('./orderHandlers');
 const { getPostcodes } = require('./postcodeHandlers');
 
 // TODO:
@@ -58,7 +58,9 @@ router.delete('/api/item', deleteItem);
 // order management routes
 
 router.get('/api/order/', getOrder);
+router.get('/api/order/shop/:shop', getShopOrders);
 router.post('/api/order/', createOrder);
+router.get('/api/order/courier/:courierId', getCourierOrders);
 router.patch('/api/order/courier', assignCourier);
 router.patch('/api/order/:order', modifyOrderStatus);
 

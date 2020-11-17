@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import DeliveryItem from './courier/DeliveryItem';
+import AssignedItem from './courier/AssignedItem';
 
 // show all pending deliveries nearby
 // map and list view? - should remember preference
@@ -10,23 +12,31 @@ import DeliveryItem from './courier/DeliveryItem';
 const CourierLanding = () => {
 
   let [deliveryDataStatus, setDeliveryDataStatus] = useState("idle");
-  let [deliveryData, setDeliveryData] = useState([]);
+  let [userDeliveries, setUserDeliveries] = useState([]);
+  let [availableDeliveries, setAvailableDeliveries] = useState([]);
+
+  const userId = useSelector((state) => state.user.userData._id);
 
   useEffect(() => {
 
     setDeliveryDataStatus("loading");
 
     try {
-      fetch('/api/order')
+      fetch('/api/order/courier/' + userId)
         .then(res => res.json())
         .then(json => {
-          let activeDeliveries = [];
-          json.data.map(item => {
-            if (item.status === "active") {
-              activeDeliveries.push(item);
+          let availableHolder = [];
+          let userDeliveryHolder = [];
+          json.assigned.map(item => {
+            if (item.status === "active" && item.courierId === "N/A") {
+              availableHolder.push(item);
+            }
+            if (item.courierId === userId) {
+              userDeliveryHolder.push(item);
             }
           })
-          setDeliveryData(activeDeliveries);
+          setUserDeliveries(userDeliveryHolder);
+          setAvailableDeliveries(availableHolder);
           setDeliveryDataStatus("complete");
         })
         .catch(err => console.log(err));
@@ -37,36 +47,54 @@ const CourierLanding = () => {
   }, []);
 
 
-  // would be cool to put a My Deliveries at the top
-  // ordered by due date
-
   return (
     <Wrapper>
-      <h1>Available Deliveries</h1>
-
       {deliveryDataStatus === "idle" &&
         <h2>Loading...</h2>
       }
+
       {deliveryDataStatus === "complete" &&
-        <table>
-          <thead>
-            <tr>
-              <th>Departure Postcode</th>
-              <th>Destination Postcode</th>
-              <th># of items</th>
-              <th>Delivery Date</th>
-              <th>Bounty</th>
-              <th>Availability</th>
-            </tr>
-          </thead>
-          <tbody>
-            {deliveryData.map(item => {
-              return <DeliveryItem data={item} />
-            })}
-          </tbody>
-        </table>
+        <>
+          <h2>My Deliveries</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Departure Address</th>
+                <th>Destination Address</th>
+                <th># of items</th>
+                <th>Delivery Date</th>
+                <th>Bounty</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userDeliveries.map(item => {
+                return <AssignedItem data={item} />
+              })}
+            </tbody>
+          </table>
+          <h2>Available Deliveries</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Departure Postcode</th>
+                <th>Destination Postcode</th>
+                <th># of items</th>
+                <th>Delivery Date</th>
+                <th>Bounty</th>
+                <th>Availability</th>
+              </tr>
+            </thead>
+            <tbody>
+              {availableDeliveries.map(item => {
+                return <DeliveryItem data={item} />
+              })}
+            </tbody>
+          </table>
+        </>
       }
-    </Wrapper>
+    </Wrapper >
   );
 };
 
