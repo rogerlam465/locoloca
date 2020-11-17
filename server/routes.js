@@ -3,7 +3,7 @@ const router = require("express").Router();
 // good god, what a mess. There's got to be a cleaner way to do this.
 
 const { getUser, createUser, modifyUser, deleteUser } = require('./userHandlers');
-const { getCart, replaceCart } = require('./cartHandlers');
+const { getCart, replaceCart, clearCart } = require('./cartHandlers');
 const { getShop, createShop, modifyShop, deleteShop } = require('./shopHandlers');
 const { getItem, getAllItems, createItem, modifyItem, deleteItem, getAllItemsByPostCode, getAllItemsInCart } = require('./itemHandlers');
 const { getOrder, createOrder, modifyOrderStatus, assignCourier } = require('./orderHandlers');
@@ -36,6 +36,7 @@ router.delete('/api/user', deleteUser);
 
 router.get('/api/cart/:id', getCart);
 router.post('/api/cart', replaceCart);
+router.delete('/api/cart', clearCart);
 
 // store management routes
 

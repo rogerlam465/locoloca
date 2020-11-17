@@ -68,13 +68,12 @@ const CartGrid = () => {
       .then(() => {
         dispatch(clearCart());
         fetch('/api/cart/', {
-          method: 'POST',
+          method: 'DELETE',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            "user": userData._id,
-            "cart": {}
+            "user": userData._id
           })
         });
       })

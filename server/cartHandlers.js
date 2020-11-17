@@ -68,4 +68,23 @@ const replaceCart = async (req, res) => {
   }
 }
 
-module.exports = { getCart, replaceCart };
+const clearCart = async (req, res) => {
+  let user = req.body.user;
+
+  try {
+    await dbConnect();
+
+    const db = client.db("locoloca");
+
+    let r = await db.collection("cart").deleteOne({ "user": user });
+
+    res.status(201).json({ status: 201, message: "data cleared" });
+
+    dbClose();
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: 500, message: "data upload failed." });
+  }
+}
+
+module.exports = { getCart, replaceCart, clearCart };
