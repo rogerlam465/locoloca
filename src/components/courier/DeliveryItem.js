@@ -2,6 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 const DeliveryItem = (props) => {
+
+  const onAssign = (e) => {
+
+
+
+  };
+
+
   const data = props.data;
 
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

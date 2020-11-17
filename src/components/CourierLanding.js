@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 
 import DeliveryItem from './courier/DeliveryItem';
 
@@ -12,12 +11,6 @@ const CourierLanding = () => {
 
   let [deliveryDataStatus, setDeliveryDataStatus] = useState("idle");
   let [deliveryData, setDeliveryData] = useState([]);
-
-  const fullUserData = useSelector((state) => state.user.userData);
-
-  let userId = fullUserData._id;
-
-  console.log(userId);
 
   useEffect(() => {
 
@@ -41,10 +34,8 @@ const CourierLanding = () => {
     } catch (err) {
       console.log(err);
     }
-
-
-
   }, []);
+
 
   // would be cool to put a My Deliveries at the top
   // ordered by due date

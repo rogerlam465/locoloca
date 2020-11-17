@@ -30,17 +30,13 @@ const CartGrid = () => {
 
   let totalPrice = 0;
 
-  // we also need the total price. that shouldn't be too bad, because
-  // we have all the item data already in itemData.
-  // we just need the numbers from the cart.
-
   const fetchData = async (userId) => {
     await fetch('/api/item/cart/' + userId)
       .then(res => res.json())
       .then(json => {
         totalPrice = 0;
-        setItemData(json.data);
         let itemDataHolder = json.data;
+        setItemData(itemDataHolder);
         itemDataHolder.map(item => {
           let targetId = item["_id"];
           totalPrice += item["price"] * cartDataRaw[targetId];
@@ -73,7 +69,7 @@ const CartGrid = () => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            "user": userData._id
+            "user": userData
           })
         });
       })
@@ -87,11 +83,15 @@ const CartGrid = () => {
 
   useEffect(() => {
     setItemLoadState("loading");
-    fetchData(userData)
-      .then(() => {
-        setPrice(totalPrice);
-        setItemLoadState("success");
-      })
+    if (cartData.length > 0) {
+      fetchData(userData)
+        .then(() => {
+          setPrice(totalPrice);
+          setItemLoadState("success");
+        })
+    } else {
+      setItemLoadState("empty");
+    }
   }, []);
 
   return (
@@ -100,11 +100,9 @@ const CartGrid = () => {
         <h2>Loading...</h2>
       }
       {itemLoadState === "empty" &&
-        <CheckoutWrapper>
-          <h1>Your cart is empty!</h1>
-        </CheckoutWrapper>
+        <h2>Your cart is empty!</h2>
       }
-      {itemLoadState === "success" && itemData.length > 0 &&
+      {itemLoadState === "success" &&
         <>
           {itemData.map(item => {
             return <CartItem itemData={item} />
@@ -112,19 +110,13 @@ const CartGrid = () => {
           }
           {price &&
             <CheckoutWrapper>
-              <h2>Your total is: ${price}!</h2>
+              <h2>Your total is: ${price.toFixed(2)}!</h2>
 
               <CheckoutButton onClick={handleClick}>Checkout!</CheckoutButton>
 
             </CheckoutWrapper>
           }
-        </>
-      }
-      {itemLoadState === "success" && itemData.length === 0 &&
-        <>
-          <CheckoutWrapper>
-            <h2>Your cart is empty!</h2>
-          </CheckoutWrapper>
+
         </>
       }
 
