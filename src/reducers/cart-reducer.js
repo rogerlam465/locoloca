@@ -40,7 +40,7 @@ export default function cartReducer(state = initialState, action) {
     }
     case 'CLEAR_CART': {
       return {
-        initialState,
+        ...initialState,
       }
     }
     default:

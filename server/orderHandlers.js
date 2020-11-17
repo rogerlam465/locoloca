@@ -146,6 +146,9 @@ const modifyOrderStatus = async (req, res) => {
 };
 
 const assignCourier = async (req, res) => {
+  let user = req.body.userId;
+  let order = req.body.orderId;
+  
   try {
     await dbConnect();
 

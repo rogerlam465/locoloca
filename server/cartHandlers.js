@@ -71,6 +71,8 @@ const replaceCart = async (req, res) => {
 const clearCart = async (req, res) => {
   let user = req.body.user;
 
+  console.log(user);
+
   try {
     await dbConnect();
 

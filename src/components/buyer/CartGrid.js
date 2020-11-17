@@ -99,7 +99,12 @@ const CartGrid = () => {
       {itemLoadState === "loading" &&
         <h2>Loading...</h2>
       }
-      {itemLoadState === "success" &&
+      {itemLoadState === "empty" &&
+        <CheckoutWrapper>
+          <h1>Your cart is empty!</h1>
+        </CheckoutWrapper>
+      }
+      {itemLoadState === "success" && itemData.length > 0 &&
         <>
           {itemData.map(item => {
             return <CartItem itemData={item} />
@@ -113,6 +118,13 @@ const CartGrid = () => {
 
             </CheckoutWrapper>
           }
+        </>
+      }
+      {itemLoadState === "success" && itemData.length === 0 &&
+        <>
+          <CheckoutWrapper>
+            <h2>Your cart is empty!</h2>
+          </CheckoutWrapper>
         </>
       }
 
