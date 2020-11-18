@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 // good god, what a mess. There's got to be a cleaner way to do this.
 
-const { getUser, createUser, modifyUser, deleteUser } = require('./userHandlers');
+const { getUser, createUser, modifyUser, deleteUser, validateUserPassword } = require('./userHandlers');
 const { getCart, replaceCart, clearCart } = require('./cartHandlers');
 const { getShop, createShop, modifyShop, deleteShop } = require('./shopHandlers');
 const { getItem, getAllItems, createItem, modifyItem, deleteItem, getAllItemsByPostCode, getAllItemsInCart } = require('./itemHandlers');
@@ -21,7 +21,8 @@ const { getPostcodes } = require('./postcodeHandlers');
 
 // user management routes
 
-router.get('/api/user', getUser);
+router.get('/api/user/:id', getUser);
+router.post('/api/user/', validateUserPassword);
 router.post('/api/user', createUser);
 router.patch('/api/user', modifyUser);
 router.delete('/api/user', deleteUser);

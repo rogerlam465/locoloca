@@ -27,15 +27,27 @@ const dbConnect = async () => {
 
 const dbClose = () => {
   client.close();
-  console.log("db disconnected, for the glory of Queen and country");
+  console.log("db disconnected");
 }
 
 // getUser, createUser, modifyUser, deleteUser
 // there's got to be a better way of doing this. This is so repetitive.
 
+const validateUserPassword = async (req,res) => {
+  try {
+    await dbConnect();
+
+    const db = client.db("locoloca");
+
+    dbClose();
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: 500, message: "Men at some times are masters of their fates: server error 500." });
+  }
+}
+
 const getUser = async (req, res) => {
-  // obvs. this is going to have to get something from the req body
-  // this can't really be done without that.
 
   try {
     await dbConnect();
@@ -55,16 +67,22 @@ const getUser = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
+
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    let r = await db.collection("users").insertOne(req.body)
+    let userExists = await db.collection("users").findOne({ "email": req.body.email });
+
+    if (userExists !== null) {
+      res.status(403).json({ status: 403, message: "Email already in database" });
+    } else {
+      await db.collection("users").insertOne(req.body);
+      res.status(201).json({ status: 201, message: "Care package delivered." });
+    }
 
     dbClose();
-
-    res.status(201).json({ status: 201, message: "Care package delivered." })
 
   } catch (err) {
     console.log(err);
@@ -110,4 +128,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-module.exports = { getUser, modifyUser, createUser, deleteUser };
+module.exports = { getUser, modifyUser, createUser, deleteUser, validateUserPassword };
