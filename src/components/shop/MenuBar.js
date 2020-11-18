@@ -14,13 +14,9 @@ const MenuBar = () => {
         <Link to="/shop/edit">
           <li>Edit Store</li>
         </Link>
-      </ul>
-
-      <h2>Order Management</h2>
-      <ul>
-        <li>Active Orders</li>
-        <li>Completed Orders</li>
-        <li>Pending Shipments</li>
+        <Link to="/shop/order">
+          <li>My Orders</li>
+        </Link>
       </ul>
     </Wrapper>
   );

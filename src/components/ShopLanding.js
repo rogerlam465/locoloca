@@ -9,6 +9,7 @@ import MenuBar from './shop/MenuBar';
 import ShopItemGrid from './shop/ShopItemGrid';
 import EditItem from './shop/EditItem';
 import EditShop from './shop/EditShop';
+import ShopOrders from './shop/ShopOrders';
 
 const ShopLanding = () => {
   const history = useHistory();
@@ -54,7 +55,11 @@ const ShopLanding = () => {
                 <EditShop />
               </Route>
 
-              <Route path="/shop/">
+              <Route path="/shop/orders">
+                <ShopOrders />
+              </Route>
+
+              <Route exact path="/shop/">
                 <ShopItemGrid />
               </Route>
 
