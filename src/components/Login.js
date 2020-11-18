@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,7 @@ import {
 const Login = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const form = useRef(null);
 
   const userLoadState = useSelector((state) => state.user.status);
 
@@ -28,7 +29,7 @@ const Login = () => {
     history.push("/createaccount");
   }
 
-  const handleSubmit = async (e) => {
+  const fetchData = async (e) => {
     e.preventDefault();
     dispatch(requestUserData());
     dispatch(requestCartData());
@@ -58,14 +59,40 @@ const Login = () => {
         dispatch(receiveUserDataError());
         console.log(error);
       });
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const dataHolder = new FormData(form.current);
+
+    let dataObj = {};
+
+    for (let pair of dataHolder.entries()) {
+      let holder = pair[0];
+      dataObj[holder] = pair[1];
+    };
+
+    console.log(dataObj);
+
+    let r = await fetch('/api/user/login', {
+      method: 'POST',
+      body: JSON.stringify(dataObj),
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .catch(error => {
+        console.log(error);
+      });
+
+      if (r === null)
 
   };
+
 
   return (
     <Wrapper>
       <h1>Hi there! Please log in here.</h1>
-      <LoginForm onSubmit={handleSubmit}>
+      <LoginForm onSubmit={handleSubmit} ref={form}>
         <FormSpacer>
           <FormLabel htmlFor="emailAddress">Email Address</FormLabel>
           <input type="email" name="emailAddress"></input>

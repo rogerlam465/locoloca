@@ -22,7 +22,7 @@ const { getPostcodes } = require('./postcodeHandlers');
 // user management routes
 
 router.get('/api/user/:id', getUser);
-router.post('/api/user/', validateUserPassword);
+router.post('/api/user/login', validateUserPassword);
 router.post('/api/user', createUser);
 router.patch('/api/user', modifyUser);
 router.delete('/api/user', deleteUser);

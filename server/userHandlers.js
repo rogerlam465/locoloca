@@ -33,11 +33,21 @@ const dbClose = () => {
 // getUser, createUser, modifyUser, deleteUser
 // there's got to be a better way of doing this. This is so repetitive.
 
-const validateUserPassword = async (req,res) => {
+const validateUserPassword = async (req, res) => {
+  let email = req.body.emailAddress;
+  let password = req.body.password;
+
+  console.log(email);
+  console.log(password);
+
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
+
+    let data = await db.collection("users").findOne({ "email": email });
+
+    console.log(data);
 
     dbClose();
 
