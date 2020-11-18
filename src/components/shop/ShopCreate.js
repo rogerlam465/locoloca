@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 
 const ShopCreate = () => {
 
@@ -9,6 +10,7 @@ const ShopCreate = () => {
   const [shopLoad, setShopLoad] = useState(null);
   const [userLoad, setUserLoad] = useState(null);
   const form = useRef(null);
+  const history = useHistory();
 
   const userId = useSelector((state) => state.user.userData._id);
 
@@ -59,6 +61,7 @@ const ShopCreate = () => {
         })
           .then(() => {
             setUserLoad("saved");
+            history.push("/shop/")
           })
           .catch(error => {
             console.log(error);
@@ -69,10 +72,6 @@ const ShopCreate = () => {
         console.log(error);
         setShopLoad("error");
       });
-
-
-
-    console.log(shopLoad);
   }
 
   return (
@@ -93,7 +92,7 @@ const ShopCreate = () => {
           <FormInput type="text" name="streetName" id="streetName" required />
 
           <label for="unitNum">Apt/Unit Number</label>
-          <FormInput type="text" name="unitNum" id="unitNum" required />
+          <FormInput type="text" name="unitNum" id="unitNum" />
 
           <label for="city">City</label>
           <FormInput type="text" name="city" id="city" required />

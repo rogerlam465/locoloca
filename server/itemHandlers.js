@@ -155,6 +155,7 @@ const getAllItemsInCart = async (req, res) => {
 
     let cartData = await db.collection("cart").findOne({ "user": targetCart });
 
+
     let dataHolder = [];
 
     for (const property in cartData.cart) {

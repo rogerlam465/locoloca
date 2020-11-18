@@ -41,7 +41,7 @@ const ShopItemGrid = () => {
   }, [])
 
   useEffect(() => {
-    if (itemState.length > 0) {
+    if (itemState.length >= 0) {
       setGetItemsState("success");
     };
   }, [itemState]);

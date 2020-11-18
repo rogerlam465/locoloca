@@ -38,15 +38,13 @@ const Login = () => {
         return res.json();
       })
       .then(json => {
-        let id = json["data"][0]["_id"];
-        dispatch(receiveUserData(json["data"][0]));
-
+        let id = json["data"]["_id"];
+        dispatch(receiveUserData(json["data"]));
         fetch('/api/cart/' + id)
           .then(res => {
             return res.json();
           })
           .then(json => {
-
             dispatch(receiveCartData(json["data"]));
           })
           .catch(error => {

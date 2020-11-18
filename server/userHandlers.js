@@ -49,7 +49,7 @@ const validateUserPassword = async (req, res) => {
     } else if (password !== data.password) {
       res.status(401).json({ status: 401, message: "Unauthorized.", auth: false });
     } else if (password === data.password) {
-      res.status(200).json({ status: 200, message: "All OK.", auth: true });
+      res.status(200).json({ status: 200, message: "All OK.", auth: true, userId: data._id });
     }
 
     dbClose();
@@ -62,12 +62,14 @@ const validateUserPassword = async (req, res) => {
 
 const getUser = async (req, res) => {
 
+  let userId = req.params.id;
+
   try {
     await dbConnect();
 
     const db = client.db("locoloca");
 
-    let user = await db.collection("users").find().toArray();
+    let user = await db.collection("users").findOne({ "_id": ObjectID(userId) });
 
     res.status(200).json({ status: 200, message: "I fight for the users!", data: user })
 

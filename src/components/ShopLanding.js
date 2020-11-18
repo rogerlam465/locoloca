@@ -21,13 +21,15 @@ const ShopLanding = () => {
   // if there is a shop, we need to fetch the shop data and go full into
   // shop management
 
+  console.log(userData.shop);
+
   if (!userData) {
     history.push("/");
     return (
       <>
       </>
     )
-  } else if (userData.shop === null) {
+  } else if (userData.shop === undefined) {
     return (
       <ShopWrapper>
         <PitchWrapper>
