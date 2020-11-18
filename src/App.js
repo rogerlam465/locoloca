@@ -14,6 +14,7 @@ import ShopperLanding from './components/ShopperLanding';
 import Cart from './components/buyer/Cart';
 import Checkout from './components/buyer/Checkout';
 import Login from './components/Login';
+import CreateAccount from './components/CreateAccount';
 
 function App() {
   return (
@@ -52,6 +53,10 @@ function App() {
 
             <Route path="/courier">
               <CourierLanding />
+            </Route>
+
+            <Route path="/createaccount">
+              <CreateAccount />
             </Route>
 
             {/* home route */}

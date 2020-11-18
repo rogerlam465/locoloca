@@ -55,8 +55,7 @@ const getAllItems = async (req, res) => {
 
     const db = client.db("locoloca");
 
-    // currently this fetches all items. Later we'll want to just find
-    // one item by its _id
+    // currently this fetches all items from a single (optional) store
 
     let r = [];
 
@@ -65,8 +64,6 @@ const getAllItems = async (req, res) => {
     } else {
       r = await db.collection("items").find().toArray();
     };
-
-    console.log(r);
 
     res.status(200).json({ status: 200, data: r, message: "TARGET LOCATED." });
 

@@ -55,7 +55,7 @@ const ShopLanding = () => {
                 <EditShop />
               </Route>
 
-              <Route path="/shop/orders">
+              <Route path="/shop/order">
                 <ShopOrders />
               </Route>
 

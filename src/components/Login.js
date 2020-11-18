@@ -24,6 +24,10 @@ const Login = () => {
     }
   }, [userLoadState]);
 
+  const createAccount = () => {
+    history.push("/createaccount");
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(requestUserData());
@@ -76,6 +80,9 @@ const Login = () => {
           <SubmitButton>Submit!</SubmitButton>
         </FormSpacer>
       </LoginForm>
+
+      <h2>Don't have an account?</h2>
+      <button onClick={createAccount}>Create an account here!</button>
     </Wrapper>
   )
 };
