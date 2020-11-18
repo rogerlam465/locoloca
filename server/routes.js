@@ -63,7 +63,7 @@ router.get('/api/order/shop/:shop', getShopOrders);
 router.post('/api/order/', createOrder);
 router.get('/api/order/courier/:courierId', getCourierOrders);
 router.patch('/api/order/courier', assignCourier);
-router.patch('/api/order/:order', modifyOrderStatus);
+router.patch('/api/order/', modifyOrderStatus);
 
 
 // postcode routes

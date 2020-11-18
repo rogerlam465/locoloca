@@ -69,6 +69,7 @@ const CourierLanding = () => {
             </thead>
             <tbody>
               {userDeliveries.map(item => {
+                console.log(item);
                 return <AssignedItem data={item} />
               })}
             </tbody>

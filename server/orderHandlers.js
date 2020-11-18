@@ -179,6 +179,8 @@ const modifyOrderStatus = async (req, res) => {
   let orderId = ObjectID(req.body.orderId);
   let status = req.body.status;
 
+  console.log("modify order", status);
+
   try {
     await dbConnect();
 

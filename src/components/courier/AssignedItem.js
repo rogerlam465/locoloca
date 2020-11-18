@@ -14,7 +14,7 @@ const DeliveryItem = (props) => {
   }, [])
 
   const delivered = () => {
-    fetch('/api/order/courier', {
+    fetch('/api/order/', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
