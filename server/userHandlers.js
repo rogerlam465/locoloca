@@ -37,9 +37,6 @@ const validateUserPassword = async (req, res) => {
   let email = req.body.emailAddress;
   let password = req.body.password;
 
-  console.log(email);
-  console.log(password);
-
   try {
     await dbConnect();
 
@@ -47,7 +44,13 @@ const validateUserPassword = async (req, res) => {
 
     let data = await db.collection("users").findOne({ "email": email });
 
-    console.log(data);
+    if (data === null) {
+      res.status(404).json({ status: 404, message: "No data found." });
+    } else if (password !== data.password) {
+      res.status(401).json({ status: 401, message: "Unauthorized.", auth: false });
+    } else if (password === data.password) {
+      res.status(200).json({ status: 200, message: "All OK.", auth: true });
+    }
 
     dbClose();
 

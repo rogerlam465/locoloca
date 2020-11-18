@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,12 +29,11 @@ const Login = () => {
     history.push("/createaccount");
   }
 
-  const fetchData = async (e) => {
-    e.preventDefault();
+  const fetchData = async (userId) => {
     dispatch(requestUserData());
     dispatch(requestCartData());
 
-    await fetch('/api/user/')
+    await fetch('/api/user/' + userId)
       .then(res => {
         return res.json();
       })
@@ -73,21 +72,23 @@ const Login = () => {
       dataObj[holder] = pair[1];
     };
 
-    console.log(dataObj);
-
     let r = await fetch('/api/user/login', {
       method: 'POST',
       body: JSON.stringify(dataObj),
       headers: { 'Content-Type': 'application/json' }
     })
+      .then(res => res.json())
+      .then(json => {
+        // put fetchData in here somewhere
+        if (json.auth === true) {
+          fetchData(json.userId);
+        }
+      })
       .catch(error => {
         console.log(error);
       });
 
-      if (r === null)
-
   };
-
 
   return (
     <Wrapper>
