@@ -68,6 +68,6 @@ router.patch('/api/order/', modifyOrderStatus);
 
 // postcode routes
 
-router.get('/api/postcode/:postcode', getPostcodes);
+router.get('/api/postcode/:lat/:long', getPostcodes);
 
 module.exports = router;
