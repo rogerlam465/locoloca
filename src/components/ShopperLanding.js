@@ -6,7 +6,7 @@ import ItemGrid from './buyer/ItemGrid';
 
 // done - add grid
 // done - capture user location (search bar)
-// todo - capture user location (web api)
+// done - capture user location (web api)
 // done - capture user location (user profile)
 // done - customize grid according to location
 // todo - search bar
@@ -98,6 +98,11 @@ const ShopperLanding = () => {
         <PostcodeInput type="text" maxLength="3" name="location" id="location" placeholder="A1B"></PostcodeInput>
         <PostcodeButton>Go!</PostcodeButton>
       </PostcodeForm>
+      <h2>What are you looking for?</h2>
+      <ProductSearchFrom>
+        <ProductSearchInput type="text" size="90" placeholder="Enter a product"></ProductSearchInput>
+        <ProductSearchButton>Whatcha got?</ProductSearchButton>
+      </ProductSearchFrom>
       {itemGrabState === "loading" &&
         <h2>Loading...</h2>
       }
@@ -113,7 +118,6 @@ export default ShopperLanding;
 
 const Wrapper = styled.div`
   margin: 30px;
-  width: 100%;
 `;
 
 const PostcodeForm = styled.form`
@@ -128,4 +132,18 @@ const PostcodeInput = styled.input`
 
 const PostcodeButton = styled.button`
   width: 150px;
+`;
+
+const ProductSearchFrom = styled.form`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ProductSearchInput = styled.input`
+  margin: 5px;
+`;
+
+const ProductSearchButton = styled.button`
+  padding: 3px;
 `;

@@ -54,13 +54,11 @@ const Header = () => {
               <Link to="/courier">
                 <MenuItems><GrDeliver /></MenuItems>
               </Link>
+              <Link to="/cart">
+                <MenuItems><GrCart /></MenuItems>
+              </Link>
+              <MenuItems onClick={handleSubmit}><GrLogout /></MenuItems>
             </>
-          }
-          <Link to="/cart">
-            <MenuItems><GrCart /></MenuItems>
-          </Link>
-          {userData &&
-            <MenuItems onClick={handleSubmit}><GrLogout /></MenuItems>
           }
           {!userData &&
             <Link to="/login">
