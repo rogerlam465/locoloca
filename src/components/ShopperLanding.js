@@ -9,7 +9,7 @@ import ItemGrid from './buyer/ItemGrid';
 // done - capture user location (web api)
 // done - capture user location (user profile)
 // done - customize grid according to location
-// todo - search bar
+// done - search bar
 // todo - build validator for postcode input (stretch)
 // todo - eventually, implement backup geolocation: use-ipcoords or similar
 
@@ -17,6 +17,7 @@ const ShopperLanding = () => {
 
   const [itemGrabState, setItemGrabState] = useState("idle");
   const [itemHolderState, setItemHolderState] = useState([]);
+  const [filteredItemState, setFilteredItemState] = useState([]);
 
   // this is incredibly roundabout. Is there a better way to do this?
   // The problem with the previous solution is that it would
@@ -74,20 +75,22 @@ const ShopperLanding = () => {
   // kinda. we need the form to trigger, basically.
 
   useEffect(() => {
-    if (itemHolderState.length > 0) {
-      console.log(itemHolderState);
-      let filteredItems = [];
-
-      // itemHolderState.map(item => {
-      //   if (item.itemName.includes)
-      // })
+    if (filteredItemState.length > 0) {
+      console.log("filtereditemchecker", filteredItemState);
       setItemGrabState("success");
     };
-  }, [itemHolderState]);
+  }, [filteredItemState]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    console.log("e.target.location.value");
+    let searchTarget = e.target.product.value;
+    let filteredItems = [];
+    itemHolderState.map(item => {
+      if (item.itemName.toLowerCase().includes(searchTarget.toLowerCase())) {
+        filteredItems.push(item);
+      }
+    });
+    setFilteredItemState(filteredItems);
   }
 
   const handlePostCodeSubmit = async (e) => {
@@ -104,9 +107,6 @@ const ShopperLanding = () => {
 
   }
 
-  // we should only load the data after we've searched and filtered
-  // would also be cool to add tags per item eventually, but we're not there yet
-
   return (
     <Wrapper>
       <h1>Shop Local!</h1>
@@ -118,15 +118,12 @@ const ShopperLanding = () => {
       </PostcodeForm>
       <h2>What are you looking for?</h2>
       <ProductSearchFrom onSubmit={handleSearchSubmit}>
-        <ProductSearchInput type="text" size="90" placeholder="Enter a product"></ProductSearchInput>
+        <ProductSearchInput type="text" size="90" name="product" id="product" placeholder="Enter a product"></ProductSearchInput>
         <ProductSearchButton>Whatcha got?</ProductSearchButton>
       </ProductSearchFrom>
-      {/* {itemGrabState === "loading" &&
-        <h2>Loading...</h2>
-      }
       {itemGrabState === "success" &&
-        <ItemGrid itemData={itemHolderState} />
-      } */}
+        <ItemGrid itemData={filteredItemState} />
+      }
     </Wrapper>
 
   );
