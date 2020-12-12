@@ -11,6 +11,7 @@ import ItemGrid from './buyer/ItemGrid';
 // done - customize grid according to location
 // todo - search bar
 // todo - build validator for postcode input (stretch)
+// todo - eventually, implement backup geolocation: use-ipcoords or similar
 
 const ShopperLanding = () => {
 
@@ -69,13 +70,27 @@ const ShopperLanding = () => {
     }
   }, [userData]);
 
+  // this is where we need to put in the search logic
+  // kinda. we need the form to trigger, basically.
+
   useEffect(() => {
     if (itemHolderState.length > 0) {
+      console.log(itemHolderState);
+      let filteredItems = [];
+
+      // itemHolderState.map(item => {
+      //   if (item.itemName.includes)
+      // })
       setItemGrabState("success");
     };
   }, [itemHolderState]);
 
-  const handleSubmit = async (e) => {
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    console.log("e.target.location.value");
+  }
+
+  const handlePostCodeSubmit = async (e) => {
     e.preventDefault();
 
     setItemGrabState("loading");
@@ -89,26 +104,29 @@ const ShopperLanding = () => {
 
   }
 
+  // we should only load the data after we've searched and filtered
+  // would also be cool to add tags per item eventually, but we're not there yet
+
   return (
     <Wrapper>
       <h1>Shop Local!</h1>
       <p>The products below are available within a 20km radius of your location; this way, we can ensure 2 day delivery!</p>
-      <PostcodeForm onSubmit={handleSubmit}>
+      <PostcodeForm onSubmit={handlePostCodeSubmit}>
         <label htmlFor="location">Enter the first half of your postal code to get started, or allow location access and we'll try to find you automagically!</label>
         <PostcodeInput type="text" maxLength="3" name="location" id="location" placeholder="A1B"></PostcodeInput>
         <PostcodeButton>Go!</PostcodeButton>
       </PostcodeForm>
       <h2>What are you looking for?</h2>
-      <ProductSearchFrom>
+      <ProductSearchFrom onSubmit={handleSearchSubmit}>
         <ProductSearchInput type="text" size="90" placeholder="Enter a product"></ProductSearchInput>
         <ProductSearchButton>Whatcha got?</ProductSearchButton>
       </ProductSearchFrom>
-      {itemGrabState === "loading" &&
+      {/* {itemGrabState === "loading" &&
         <h2>Loading...</h2>
       }
       {itemGrabState === "success" &&
         <ItemGrid itemData={itemHolderState} />
-      }
+      } */}
     </Wrapper>
 
   );
